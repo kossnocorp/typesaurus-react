@@ -6,3 +6,13 @@ This change log follows the format documented in [Keep a CHANGELOG].
 
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
+
+## 0.1.0 - 2020-01-13
+
+### Added
+
+- Added functions:
+  - `useGet`
+  - `useOnGet`
+  - `useQuery`
+  - `useOnQuery`

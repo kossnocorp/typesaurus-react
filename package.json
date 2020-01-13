@@ -1,0 +1,42 @@
+{
+  "name": "reactopod",
+  "version": "0.0.0",
+  "description": "React Hooks for Typesaurus, type-safe Firestore ODM",
+  "keywords": [
+    "React",
+    "React Hooks",
+    "Firebase",
+    "Firestore",
+    "TypeScript",
+    "Typesaurus"
+  ],
+  "main": "index.js",
+  "repository": "https://github.com/kossnocorp/reactopod",
+  "author": "Sasha Koss <koss@nocorp.me>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.8.2",
+    "@babel/preset-typescript": "^7.8.0",
+    "@types/jasmine": "^3.5.0",
+    "@types/node": "^13.1.6",
+    "@types/sinon": "^7.5.1",
+    "@types/webpack-env": "^1.15.0",
+    "babel-loader": "^8.0.6",
+    "babel-preset-power-assert": "^3.0.0",
+    "firebase": "^7.6.2",
+    "firebase-tools": "^7.11.0",
+    "karma": "^4.4.1",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-jasmine": "^3.1.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^4.0.2",
+    "power-assert": "^1.6.1",
+    "prettier": "^1.19.1",
+    "puppeteer": "^2.0.0",
+    "sinon": "^8.0.4",
+    "typedoc": "^0.16.2",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.5"
+  }
+}

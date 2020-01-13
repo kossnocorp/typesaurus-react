@@ -1,0 +1,7 @@
+node_modules
+lib
+/secrets
+.envrc
+docs
+firestore-debug.log
+firebase-debug.log

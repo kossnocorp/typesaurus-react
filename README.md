@@ -4,7 +4,7 @@ React Hooks for [Typesaurus](https://github.com/kossnocorp/typesaurus), type-saf
 
 <hr>
 <div align="center">
-🔥🔥🔥 <strong>The project is sponsered by <a href='https://backupfire.dev/'>Backup Fire</a>, backup service for Firebase</strong> 🔥🔥🔥
+🔥🔥🔥 <strong>The project is sponsored by <a href='https://backupfire.dev/'>Backup Fire</a>, backup service for Firebase</strong> 🔥🔥🔥
 </div>
 <hr>
 
@@ -36,7 +36,7 @@ firebase.initializeApp({
 })
 ```
 
-[See Firebase docs for more info](https://firebase.google.com/docs/web/setup#add-sdks-initialize)).
+[See Firebase docs for more info](https://firebase.google.com/docs/web/setup#add-sdks-initialize).
 
 ## Changelog
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from '../adaptor'
 import { Collection } from 'typesaurus/collection'
 import { Doc } from 'typesaurus/doc'
 import onGet from 'typesaurus/onGet'

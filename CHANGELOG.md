@@ -7,6 +7,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## 0.2.0 - 2020-01-14
+
+### Changed
+
+- Make Reactopod work both with React and Preact.
+
 ## 0.1.0 - 2020-01-13
 
 ### Added

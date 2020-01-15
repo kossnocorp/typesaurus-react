@@ -23,11 +23,15 @@ build:
 	@rm -rf lib
 	@${BIN}/tsc
 	@${BIN}/prettier "lib/**/*.[jt]s" --write --loglevel silent
-	@cp {package.json,*.md} lib
-	@rsync --archive --prune-empty-dirs --exclude '*.ts' --relative src/./ lib
+	@cp {package.json,*.md} lib/reactopod
+	@rsync --archive --prune-empty-dirs --exclude '*.ts' --relative src/./ lib/reactopod
+	@cp -r lib/reactopod lib/preactopod
+	@${BIN}/ts-node scripts/patchReactopod.ts
+	@${BIN}/ts-node scripts/patchPreactopod.ts
 
 publish: build
-	cd lib && npm publish --access public
+	cd lib/reactopod && npm publish --access public
+	cd lib/preactopod && npm publish --access public
 
 publish-next: build
 	cd lib && npm publish --access public --tag next

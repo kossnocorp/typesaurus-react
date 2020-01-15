@@ -7,6 +7,18 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## 0.3.0 - 2020-01-15
+
+### Changed
+
+- **BREAKING**: `reactopod` now only supports React.
+
+- Get rid of webpack warning during compilation.
+
+### Added
+
+- Publish separate `preactopod` package for Preact.
+
 ## 0.2.0 - 2020-01-14
 
 ### Changed

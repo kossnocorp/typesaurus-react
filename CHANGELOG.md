@@ -7,6 +7,14 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## Unreleased
+
+### Added
+
+- Added functions:
+  - `useAll`
+  - `useOnAll`
+
 ## 0.3.0 - 2020-01-15
 
 ### Changed

@@ -1,4 +1,6 @@
+export { default as useAll } from './useAll'
 export { default as useGet } from './useGet'
+export { default as useOnAll } from './useOnAll'
 export { default as useOnGet } from './useOnGet'
 export { default as useOnQuery } from './useOnQuery'
 export { default as useQuery } from './useQuery'

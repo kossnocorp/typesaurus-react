@@ -1,5 +1,7 @@
 export { default as useAll } from './useAll'
 export { default as useGet } from './useGet'
+export { default as useInfiniteQuery } from './useInfiniteQuery'
+export { default as useInfiniteScroll } from './useInfiniteScroll'
 export { default as useOnAll } from './useOnAll'
 export { default as useOnGet } from './useOnGet'
 export { default as useOnQuery } from './useOnQuery'

@@ -7926,10 +7926,10 @@ typedoc@^0.16.2:
     typedoc-default-themes "^0.7.0"
     typescript "3.7.x"
 
-typesaurus@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/typesaurus/-/typesaurus-5.0.0.tgz#3a2402d07338ec6f4678f9dec756620024676b3d"
-  integrity sha512-cDYyrEylmR0iRjtQGemYPjBlyzxVQWnqUiCVYceIkA4BDAh20utPIZHCb9ludL7EgJN5Q9b8zsJ5pwSq94gWHA==
+typesaurus@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/typesaurus/-/typesaurus-5.1.0.tgz#c661c551da214f634fae3db7efa7b7bbc1635a54"
+  integrity sha512-bOHvT2XfIH8BL0rsb4+iTF7DMws+FoQCTuGKYwW3NoLBnlsp6e1xDusdznbMVNFUR7pXXHf3Koak5g0nuJ1lVg==
 
 typescript@3.7.x, typescript@^3.7.4:
   version "3.7.4"

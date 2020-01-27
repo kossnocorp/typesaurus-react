@@ -7,11 +7,13 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
-## Unreleased
+## 0.4.0 - 2020-01-27
 
 ### Added
 
 - Added functions:
+  - `useInfiniteQuery`
+  - `useInfiniteScroll`
   - `useAll`
   - `useOnAll`
 

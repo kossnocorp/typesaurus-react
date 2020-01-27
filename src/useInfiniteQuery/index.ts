@@ -1,16 +1,15 @@
-import { useEffect, useState } from '../adaptor/react'
 import { Collection } from 'typesaurus/collection'
+import { startAfter } from 'typesaurus/cursor'
 import { Doc } from 'typesaurus/doc'
 import { CollectionGroup } from 'typesaurus/group'
-import { query, Query } from 'typesaurus/query'
-import { useRef } from 'react'
-import { order } from 'typesaurus/order'
-import { startAfter } from 'typesaurus/cursor'
 import { limit } from 'typesaurus/limit'
+import { order } from 'typesaurus/order'
+import { query, Query } from 'typesaurus/query'
+import { useEffect, useRef, useState } from '../adaptor'
 import {
-  InfiniteQueryOptions,
+  InfiniteCursorsState,
   InfiniteLoadMoreState,
-  InfiniteCursorsState
+  InfiniteQueryOptions
 } from '../_lib/infinite'
 
 export default function useInfiniteQuery<Model, FieldName extends keyof Model>(

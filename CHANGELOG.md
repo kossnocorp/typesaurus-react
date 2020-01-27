@@ -7,6 +7,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## 0.4.2 - 2020-01-27
+
+### Fixed
+
+- Fixed the Preact package.
+
 ## 0.4.0 - 2020-01-27
 
 ### Added

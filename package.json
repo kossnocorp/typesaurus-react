@@ -1,6 +1,6 @@
 {
   "name": "reactopod",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "React Hooks for Typesaurus, type-safe Firestore ODM",
   "keywords": [
     "React",

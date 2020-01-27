@@ -1,7 +1,7 @@
 import all from 'typesaurus/all'
 import { Collection } from 'typesaurus/collection'
 import { Doc } from 'typesaurus/doc'
-import { useEffect, useState } from '../adaptor/react'
+import { useEffect, useState } from '../adaptor'
 
 export default function useAll<Model>(
   collection: Collection<Model>

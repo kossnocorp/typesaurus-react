@@ -73,7 +73,7 @@ type User = { name: string }
 const users = collection<User>('users')
 
 function Component({ userId }: { userId: string }) {
-  const user = useGet(users, userId)
+  const user = useOnGet(users, userId)
   return user ? <div>Hello, {user.data.name}</div> : <div>Loading...</div>
 }
 ```

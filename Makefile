@@ -34,7 +34,8 @@ publish: build
 	cd lib/preactopod && npm publish --access public
 
 publish-next: build
-	cd lib && npm publish --access public --tag next
+	cd lib/reactopod && npm publish --access public --tag next
+	cd lib/preactopod && npm publish --access public --tag next
 
 docs:
 	@${BIN}/typedoc --theme minimal --name Reactopod

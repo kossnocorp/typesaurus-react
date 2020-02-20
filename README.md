@@ -1,4 +1,4 @@
-# 🦕 Reactopod
+# 🦕 Typesaurus React
 
 React Hooks for [Typesaurus](https://github.com/kossnocorp/typesaurus), type-safe Firestore ODM.
 
@@ -10,28 +10,27 @@ React Hooks for [Typesaurus](https://github.com/kossnocorp/typesaurus), type-saf
 
 ## Installation
 
-The library is available as an [npm package](https://www.npmjs.com/package/reactopod).
-To install Reactopod run:
+The library is available as an npm package. To install Typesaurus React run:
 
 ```sh
 # React:
-npm install reactopod --save
+npm install @typesaurus/react --save
 # Or using Yarn:
-yarn add reactopod
+yarn add @typesaurus/react
 
 # Preact:
-npm install preactopod --save
+npm install @typesaurus/preact --save
 # Or using Yarn:
-yarn add preactopod
+yarn add @typesaurus/preact
 ```
 
-_Note that Reactopod has Typesaurus listed as a peer dependency which also requires `firebase` package to work in the web environment. The latter isn't listed in dependencies, so make sure you did install both. For more info about Typesaurus dependencies, refer to its Installation section of README. Also, if you have to have `react` or `preact` installed for `reactopod` and `preactopod` respectively._
+_Note that Typesaurus React has Typesaurus listed as a peer dependency which also requires `firebase` package to work in the web environment. The latter isn't listed in dependencies, so make sure you did install both. For more info about Typesaurus dependencies, refer to its Installation section of README. Also, if you have to have `react` or `preact` installed for `@typesaurus/react` and `@typesaurus/preact` respectively._
 
 ## Get started
 
 ### Initialization
 
-To start working with Reactopod, initialize Firebase normally:
+To start working with Typesaurus React, initialize Firebase normally:
 
 ```ts
 import * as firebase from 'firebase/app'
@@ -49,8 +48,8 @@ firebase.initializeApp({
 Use `useGet` hook to fetch document with the given id.
 
 ```ts
-import { createElement } from 'react'
-import { useGet } from 'reactopod'
+import React from 'react'
+import { useGet } from '@typesaurus/react'
 import { collection } from 'typesaurus'
 
 type User = { name: string }
@@ -65,8 +64,8 @@ function Component({ userId }: { userId: string }) {
 Use `useOnGet` hook to subscribe to a document with the given id. When the document changes you'll receive the new data automatically.
 
 ```ts
-import { createElement } from 'react'
-import { useOnGet } from 'reactopod'
+import React from 'react'
+import { useOnGet } from '@typesaurus/react'
 import { collection } from 'typesaurus'
 
 type User = { name: string }
@@ -83,8 +82,8 @@ function Component({ userId }: { userId: string }) {
 Use `useAll` hook to fetch all documents from a collection.
 
 ```ts
-import { createElement } from 'react'
-import { useAll } from 'reactopod'
+import React from 'react'
+import { useAll } from '@typesaurus/react'
 import { collection } from 'typesaurus'
 
 type User = { name: string }
@@ -107,8 +106,8 @@ function Component() {
 Use `useOnAll` hook to subscribe to all documents within a collection. When a document in the collection changes you'll receive the new data.
 
 ```ts
-import { createElement } from 'react'
-import { useOnAll } from 'reactopod'
+import React from 'react'
+import { useOnAll } from '@typesaurus/react'
 import { collection } from 'typesaurus'
 
 type User = { name: string }
@@ -133,8 +132,8 @@ function Component() {
 Use `useQuery` hook to query documents from a collection using using query objects.
 
 ```ts
-import { createElement } from 'react'
-import { useQuery } from 'reactopod'
+import React from 'react'
+import { useQuery } from '@typesaurus/react'
 import { collection, where } from 'typesaurus'
 
 type Game = { title: string; platform: 'switch' | 'xbox' | 'ps' | 'pc' }
@@ -157,8 +156,8 @@ function Component() {
 Use `useOnQuery` hook to subscribe to a query results. When the result changes you'll receive the new data.
 
 ```ts
-import { createElement } from 'react'
-import { useOnQuery } from 'reactopod'
+import React from 'react'
+import { useOnQuery } from '@typesaurus/react'
 import { collection, where } from 'typesaurus'
 
 type Game = { title: string; platform: 'switch' | 'xbox' | 'ps' | 'pc' }
@@ -198,8 +197,8 @@ Use `useInfiniteQuery` to query documents with pagination.
 The function returns an array where the first element is the result and the second is `loadMore`. `loadMore` is `undefined` when the result is loading. `loadMore` is `null` when there're no more data to load. Otherwise `loadMore` is a function that triggers loading of the next page.
 
 ```ts
-import { createElement } from 'react'
-import { useInfiniteQuery } from 'reactopod'
+import React from 'react'
+import { useInfiniteQuery } from '@typesaurus/react'
 import { collection, where } from 'typesaurus'
 
 type Game = {
@@ -241,8 +240,8 @@ Combine `useInfiniteQuery` with `useInfiniteScroll` to implement the infinite sc
 `useInfiniteScroll` accepts two arguments. The first is the scroll threshold. If you pass `1.5`, then more results will load when the scroll position is more than full height minus 1.5 x screen height. The second argument is `loadMore` function returned from `useInfiniteQuery`.
 
 ```ts
-import { createElement } from 'react'
-import { useInfiniteQuery, useInfiniteScroll } from 'reactopod'
+import React from 'react'
+import { useInfiniteQuery, useInfiniteScroll } from '@typesaurus/react'
 import { collection, where } from 'typesaurus'
 
 type Game = {

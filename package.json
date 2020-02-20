@@ -1,6 +1,6 @@
 {
-  "name": "reactopod",
-  "version": "0.4.2",
+  "name": "@typesaurus/react",
+  "version": "1.0.0",
   "description": "React Hooks for Typesaurus, type-safe Firestore ODM",
   "keywords": [
     "React",
@@ -11,7 +11,7 @@
     "Typesaurus"
   ],
   "main": "index.js",
-  "repository": "https://github.com/kossnocorp/reactopod",
+  "repository": "https://github.com/kossnocorp/typesaurus-react",
   "author": "Sasha Koss <koss@nocorp.me>",
   "license": "MIT",
   "devDependencies": {

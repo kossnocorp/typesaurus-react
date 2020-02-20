@@ -26,7 +26,7 @@ make test-watch
 
 ### System tests
 
-Reactopod system tests connect to a real database, so to run them, you need to prepare a Firebase project and point the suite to the project. See [How to set up tests?](#how-to-set-up-system-tests) for more details.
+Typesaurus React system tests connect to a real database, so to run them, you need to prepare a Firebase project and point the suite to the project. See [How to set up tests?](#how-to-set-up-system-tests) for more details.
 
 #### How to run system tests?
 

@@ -41,7 +41,7 @@ type PackageJSON = {
 
 function patchPackageJSON(packageJSON: PackageJSON): PackageJSON {
   return Object.assign({}, packageJSON, {
-    name: 'preactopod',
+    name: '@typesaurus/preact',
     description: packageJSON.description.replace('React', 'Preact'),
     keywords: packageJSON.keywords.reduce(
       (acc, keyword) => acc.concat(keyword.replace('React', 'Preact')),

@@ -177,6 +177,56 @@ function Component() {
 }
 ```
 
+### Getting multiple documents
+
+Use `useGetMany` hook to fetch multiple documents by the given ids.
+
+```ts
+import React from 'react'
+import { useGetMany } from '@typesaurus/react'
+import { collection } from 'typesaurus'
+
+type Game = { title: string; platform: 'switch' | 'xbox' | 'ps' | 'pc' }
+const games = collection<Game>('games')
+
+function Component({ cardIds }: { cardIds: string[] }) {
+  const cardGames = useGetMany(games, cardIds)
+  return cardGames ? (
+    <ul>
+      {cardGames.map(game => (
+        <li>{game.data.title}</li>
+      ))}
+    </ul>
+  ) : (
+    <div>Loading...</div>
+  )
+}
+```
+
+Use `useOnGetMany` hook to subscribe to multiple documents by the given ids. When a document changes you'll receive the new data automatically.
+
+```ts
+import React from 'react'
+import { useOnGetMany } from '@typesaurus/react'
+import { collection } from 'typesaurus'
+
+type Game = { title: string; platform: 'switch' | 'xbox' | 'ps' | 'pc' }
+const games = collection<Game>('games')
+
+function Component({ cardIds }: { cardIds: string[] }) {
+  const cardGames = useOnGetMany(games, cardIds)
+  return cardGames ? (
+    <ul>
+      {cardGames.map(game => (
+        <li>{game.data.title}</li>
+      ))}
+    </ul>
+  ) : (
+    <div>Loading...</div>
+  )
+}
+```
+
 See [Typesaurus documentation](https://typesaurus.com/) for more info about the query objects:
 
 - [`order`](https://typesaurus.com/modules/_order_index_.html#order) - Creates order query object with given field, ordering method and pagination cursors.

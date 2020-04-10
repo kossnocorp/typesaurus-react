@@ -11,11 +11,8 @@ export default function useOnGetMany<Model>(
 
   const deps = [JSON.stringify(collection), JSON.stringify(ids)]
   useEffect(() => {
-    if (ids) {
-      return onGetMany(collection, ids, setResult)
-    } else if (result) {
-      setResult(undefined)
-    }
+    if (result) setResult(undefined)
+    if (ids) return onGetMany(collection, ids, setResult)
   }, deps)
 
   return result

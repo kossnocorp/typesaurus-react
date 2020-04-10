@@ -14,7 +14,7 @@ import {
 
 export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   collection: Collection<Model> | CollectionGroup<Model>,
-  queries: Query<Model, keyof Model>[],
+  queries: Query<Model, keyof Model>[] | undefined,
   options: InfiniteQueryOptions<FieldName>
 ): typeof queries extends undefined
   ? [undefined, undefined]
@@ -25,30 +25,32 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   const cursorsMap = useRef<InfiniteCursorsState>({})
   const cursorId = cursor?.ref.id || 'initial'
 
-  const deps = [JSON.stringify(collection), JSON.stringify(queries), cursorId]
+  const sharedDeps = [JSON.stringify(collection), JSON.stringify(queries)]
+
   useEffect(() => {
-    if (queries) {
-      if (cursorsMap.current[cursorId] === undefined) {
-        cursorsMap.current[cursorId] = 'loading'
-        query(
-          collection,
-          queries.concat([
-            order(
-              options.field,
-              options.method || 'asc',
-              cursor ? [startAfter(cursor)] : []
-            ),
-            limit(options.limit)
-          ])
-        ).then(newResult => {
-          cursorsMap.current[cursorId] = 'loaded'
-          if (newResult.length === 0 || newResult.length < options.limit)
-            setLoadedAll(true)
-          setResult((result || []).concat(newResult))
-        })
-      }
-    } else if (result) {
-      setResult(undefined)
+    if (result) setResult(undefined)
+  }, sharedDeps)
+
+  const deps = sharedDeps.concat(cursorId)
+  useEffect(() => {
+    if (queries && cursorsMap.current[cursorId] === undefined) {
+      cursorsMap.current[cursorId] = 'loading'
+      query(
+        collection,
+        queries.concat([
+          order(
+            options.field,
+            options.method || 'asc',
+            cursor ? [startAfter(cursor)] : []
+          ),
+          limit(options.limit)
+        ])
+      ).then(newResult => {
+        cursorsMap.current[cursorId] = 'loaded'
+        if (newResult.length === 0 || newResult.length < options.limit)
+          setLoadedAll(true)
+        setResult((result || []).concat(newResult))
+      })
     }
   }, deps)
 

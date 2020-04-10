@@ -7,6 +7,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## 2.0.0 - 2020-04-10
+
+### Changed
+
+- **BREAKING**: Now, when query or collection is changed, hook state resets to `undefined` while previously it would stay as is until the new data is fetched.
+
 ## 1.0.0 - 2020-02-20
 
 ### Changed

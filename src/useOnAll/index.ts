@@ -9,7 +9,10 @@ export default function useOnAll<Model>(
   const [result, setResult] = useState<Doc<Model>[] | undefined>(undefined)
 
   const deps = [JSON.stringify(collection)]
-  useEffect(() => onAll(collection, setResult), deps)
+  useEffect(() => {
+    if (result) setResult(undefined)
+    return onAll(collection, setResult)
+  }, deps)
 
   return result
 }

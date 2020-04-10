@@ -12,11 +12,8 @@ export default function useOnQuery<Model>(
 
   const deps = [JSON.stringify(collection), JSON.stringify(queries)]
   useEffect(() => {
-    if (queries) {
-      return onQuery(collection, queries, setResult)
-    } else if (result) {
-      setResult(undefined)
-    }
+    if (result) setResult(undefined)
+    if (queries) return onQuery(collection, queries, setResult)
   }, deps)
 
   return result

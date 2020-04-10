@@ -11,11 +11,8 @@ export default function useOnGet<Model>(
 
   const deps = [JSON.stringify(collection), id]
   useEffect(() => {
-    if (id) {
-      return onGet(collection, id, setResult)
-    } else if (result) {
-      setResult(undefined)
-    }
+    if (result) setResult(undefined)
+    if (id) return onGet(collection, id, setResult)
   }, deps)
 
   return result

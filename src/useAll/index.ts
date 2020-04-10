@@ -10,6 +10,7 @@ export default function useAll<Model>(
 
   const deps = [JSON.stringify(collection)]
   useEffect(() => {
+    if (result) setResult(undefined)
     all(collection).then(setResult)
   }, deps)
 

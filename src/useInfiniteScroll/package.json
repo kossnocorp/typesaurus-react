@@ -1,0 +1,4 @@
+{
+  "module": "../esm/useInfiniteScroll/index.js",
+  "sideEffects": false
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../esm/useGet/index.js",
+  "sideEffects": false
+}

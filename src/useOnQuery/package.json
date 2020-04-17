@@ -1,0 +1,4 @@
+{
+  "module": "../esm/useOnQuery/index.js",
+  "sideEffects": false
+}

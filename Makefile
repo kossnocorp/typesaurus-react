@@ -25,6 +25,8 @@ build:
 	@${BIN}/prettier "lib/**/*.[jt]s" --write --loglevel silent
 	@cp {package.json,*.md} lib/reactopod
 	@rsync --archive --prune-empty-dirs --exclude '*.ts' --relative src/./ lib/reactopod
+	@${BIN}/tsc --outDir lib/reactopod/esm --module es2020 --target es2019
+	@cp src/adaptor/package.json lib/reactopod/esm/adaptor/package.json
 	@cp -r lib/reactopod lib/preactopod
 	@${BIN}/ts-node scripts/patchReactopod.ts
 	@${BIN}/ts-node scripts/patchPreactopod.ts

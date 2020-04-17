@@ -7,6 +7,16 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## 3.0.0 - 2020-04-17
+
+### Changed
+
+- **BREAKING**: When using with ESM-enabled bundler, you should transpile `node_modules`. TypeScript preserves many modern languages features when it compiles to ESM code. So if you have to support older browsers, use Babel to process the dependencies code.
+
+### Added
+
+- Added ESM version of the code that enables tree-shaking.
+
 ## 2.0.0 - 2020-04-10
 
 ### Changed

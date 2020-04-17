@@ -26,6 +26,10 @@ yarn add @typesaurus/preact
 
 _Note that Typesaurus React has Typesaurus listed as a peer dependency which also requires `firebase` package to work in the web environment. The latter isn't listed in dependencies, so make sure you did install both. For more info about Typesaurus dependencies, refer to its Installation section of README. Also, if you have to have `react` or `preact` installed for `@typesaurus/react` and `@typesaurus/preact` respectively._
 
+## Configuration
+
+Typesaurus React does not require additional configuration, however **when using with ESM-enabled bundler, you should transpile `node_modules`**. TypeScript preserves many modern languages features when it compiles to ESM code. So if you have to support older browsers, use Babel to process the dependencies code
+
 ## Get started
 
 ### Initialization
@@ -93,7 +97,7 @@ function Component() {
   const allUsers = useAll(users)
   return allUsers ? (
     <ul>
-      {allUsers.map(user => (
+      {allUsers.map((user) => (
         <li>{user.data.name}</li>
       ))}
     </ul>
@@ -117,7 +121,7 @@ function Component() {
   const allUsers = useOnAll(users)
   return allUsers ? (
     <ul>
-      {allUsers.map(user => (
+      {allUsers.map((user) => (
         <li>{user.data.name}</li>
       ))}
     </ul>
@@ -143,7 +147,7 @@ function Component() {
   const switchGames = useQuery(games, [where('platform', '==', 'switch')])
   return switchGames ? (
     <ul>
-      {switchGames.map(game => (
+      {switchGames.map((game) => (
         <li>{game.data.title}</li>
       ))}
     </ul>
@@ -167,7 +171,7 @@ function Component() {
   const switchGames = useOnQuery(games, [where('platform', '==', 'switch')])
   return switchGames ? (
     <ul>
-      {switchGames.map(game => (
+      {switchGames.map((game) => (
         <li>{game.data.title}</li>
       ))}
     </ul>
@@ -193,7 +197,7 @@ function Component({ cardIds }: { cardIds: string[] }) {
   const cardGames = useGetMany(games, cardIds)
   return cardGames ? (
     <ul>
-      {cardGames.map(game => (
+      {cardGames.map((game) => (
         <li>{game.data.title}</li>
       ))}
     </ul>
@@ -217,7 +221,7 @@ function Component({ cardIds }: { cardIds: string[] }) {
   const cardGames = useOnGetMany(games, cardIds)
   return cardGames ? (
     <ul>
-      {cardGames.map(game => (
+      {cardGames.map((game) => (
         <li>{game.data.title}</li>
       ))}
     </ul>
@@ -268,7 +272,7 @@ function Component() {
   return switchGames ? (
     <div>
       <ul>
-        {switchGames.map(game => (
+        {switchGames.map((game) => (
           <li>{game.data.title}</li>
         ))}
       </ul>
@@ -310,7 +314,7 @@ function Component() {
   useInfiniteScroll(1.5, loadMore)
   return switchGames ? (
     <ul>
-      {switchGames.map(game => (
+      {switchGames.map((game) => (
         <li>{game.data.title}</li>
       ))}
     </ul>

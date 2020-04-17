@@ -1,6 +1,6 @@
 {
   "name": "@typesaurus/react",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "React Hooks for Typesaurus, type-safe Firestore ODM",
   "keywords": [
     "React",
@@ -11,6 +11,8 @@
     "Typesaurus"
   ],
   "main": "index.js",
+  "module": "esm/index.js",
+  "sideEffects": false,
   "repository": "https://github.com/kossnocorp/typesaurus-react",
   "author": "Sasha Koss <koss@nocorp.me>",
   "license": "MIT",
@@ -35,14 +37,14 @@
     "karma-webpack": "^4.0.2",
     "power-assert": "^1.6.1",
     "preact": "^10.2.1",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.4",
     "puppeteer": "^2.0.0",
     "react": "^16.12.0",
     "sinon": "^8.0.4",
     "ts-node": "^8.6.2",
     "typedoc": "^0.16.2",
     "typesaurus": "^5.3.0",
-    "typescript": "^3.7.4",
+    "typescript": "^3.8.3",
     "webpack": "^4.41.5"
   },
   "peerDependencies": {

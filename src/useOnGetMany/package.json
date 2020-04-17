@@ -1,0 +1,4 @@
+{
+  "module": "../esm/useOnGetMany/index.js",
+  "sideEffects": false
+}

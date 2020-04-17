@@ -1,0 +1,4 @@
+{
+  "module": "../esm/useInfiniteQuery/index.js",
+  "sideEffects": false
+}

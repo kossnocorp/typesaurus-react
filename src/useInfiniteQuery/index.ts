@@ -6,6 +6,7 @@ import { limit } from 'typesaurus/limit'
 import { order } from 'typesaurus/order'
 import { query, Query } from 'typesaurus/query'
 import { useEffect, useRef, useState } from '../adaptor'
+import { TypesaurusHookResult } from '../types'
 import {
   InfiniteCursorsState,
   InfiniteLoadMoreState,
@@ -16,14 +17,21 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   collection: Collection<Model> | CollectionGroup<Model>,
   queries: Query<Model, keyof Model>[] | undefined,
   options: InfiniteQueryOptions<FieldName>
-): typeof queries extends undefined
-  ? [undefined, undefined]
-  : [Doc<Model>[] | undefined, InfiniteLoadMoreState] {
+): TypesaurusHookResult<
+  typeof queries extends undefined ? undefined : Doc<Model>[],
+  {
+    loadMore: typeof queries extends undefined
+      ? undefined
+      : InfiniteLoadMoreState
+  }
+> {
   const [result, setResult] = useState<Doc<Model>[] | undefined>(undefined)
+  const [error, setError] = useState<unknown>(undefined)
   const [cursor, setCursor] = useState<Doc<Model> | undefined>(undefined)
   const [loadedAll, setLoadedAll] = useState(false)
   const cursorsMap = useRef<InfiniteCursorsState>({})
   const cursorId = cursor?.ref.id || 'initial'
+  const loading = result === undefined
 
   const sharedDeps = [JSON.stringify(collection), JSON.stringify(queries)]
 
@@ -45,12 +53,14 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
           ),
           limit(options.limit)
         ])
-      ).then(newResult => {
-        cursorsMap.current[cursorId] = 'loaded'
-        if (newResult.length === 0 || newResult.length < options.limit)
-          setLoadedAll(true)
-        setResult((result || []).concat(newResult))
-      })
+      )
+        .then(newResult => {
+          cursorsMap.current[cursorId] = 'loaded'
+          if (newResult.length === 0 || newResult.length < options.limit)
+            setLoadedAll(true)
+          setResult((result || []).concat(newResult))
+        })
+        .catch(setError)
     }
   }, deps)
 
@@ -62,5 +72,5 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
       }
     : undefined
 
-  return [result, loadMore]
+  return [result, { loading, error, loadMore }]
 }

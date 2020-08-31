@@ -4,28 +4,36 @@
 BIN = $(shell yarn bin)
 
 test:
-	${BIN}/firebase emulators:exec --only firestore "${BIN}/karma start --single-run"
+	${BIN}/firebase emulators:exec --only firestore "${BIN}/jest --env node"
 .PHONY: test
 
 test-watch:
-	${BIN}/firebase emulators:exec --only firestore "${BIN}/karma start"
+	${BIN}/firebase emulators:exec --only firestore "${BIN}/jest --env node --watch"
 
 test-setup:
 	${BIN}/firebase setup:emulators:firestore
 
-test-system:
-	env SYSTEM_TESTS=true ${BIN}/karma start --single-run
+test-system: test-system-node test-system-browser
 
-test-system-watch:
-	env SYSTEM_TESTS=true ${BIN}/karma start
+test-system-node:
+	${BIN}/jest --env node
+
+test-system-node-watch:
+	${BIN}/jest --env node --watch
+
+test-system-browser:
+	${BIN}/karma start --single-run
+
+test-system-browser-watch:
+	${BIN}/karma start
 
 build:
 	@rm -rf lib
-	@${BIN}/tsc
+	@${BIN}/tsc --project tsconfig.lib.json
 	@${BIN}/prettier "lib/**/*.[jt]s" --write --loglevel silent
 	@cp {package.json,*.md} lib/reactopod
 	@rsync --archive --prune-empty-dirs --exclude '*.ts' --relative src/./ lib/reactopod
-	@${BIN}/tsc --outDir lib/reactopod/esm --module es2020 --target es2019
+	@${BIN}/tsc --project tsconfig.lib.json --outDir lib/reactopod/esm --module es2020 --target es2019
 	@cp src/adaptor/package.json lib/reactopod/esm/adaptor/package.json
 	@cp -r lib/reactopod lib/preactopod
 	@${BIN}/ts-node scripts/patchReactopod.ts

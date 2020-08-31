@@ -60,8 +60,15 @@ type User = { name: string }
 const users = collection<User>('users')
 
 function Component({ userId }: { userId: string }) {
-  const user = useGet(users, userId)
-  return user ? <div>Hello, {user.data.name}</div> : <div>Loading...</div>
+  const [user, { loading, error }] = useGet(users, userId)
+
+  if (user) {
+    return <div>Hello, {user.data.name}</div>
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the user!</div>
+  }
 }
 ```
 
@@ -97,7 +104,7 @@ function Component() {
   const allUsers = useAll(users)
   return allUsers ? (
     <ul>
-      {allUsers.map((user) => (
+      {allUsers.map(user => (
         <li>{user.data.name}</li>
       ))}
     </ul>
@@ -121,7 +128,7 @@ function Component() {
   const allUsers = useOnAll(users)
   return allUsers ? (
     <ul>
-      {allUsers.map((user) => (
+      {allUsers.map(user => (
         <li>{user.data.name}</li>
       ))}
     </ul>
@@ -147,7 +154,7 @@ function Component() {
   const switchGames = useQuery(games, [where('platform', '==', 'switch')])
   return switchGames ? (
     <ul>
-      {switchGames.map((game) => (
+      {switchGames.map(game => (
         <li>{game.data.title}</li>
       ))}
     </ul>
@@ -171,7 +178,7 @@ function Component() {
   const switchGames = useOnQuery(games, [where('platform', '==', 'switch')])
   return switchGames ? (
     <ul>
-      {switchGames.map((game) => (
+      {switchGames.map(game => (
         <li>{game.data.title}</li>
       ))}
     </ul>
@@ -197,7 +204,7 @@ function Component({ cardIds }: { cardIds: string[] }) {
   const cardGames = useGetMany(games, cardIds)
   return cardGames ? (
     <ul>
-      {cardGames.map((game) => (
+      {cardGames.map(game => (
         <li>{game.data.title}</li>
       ))}
     </ul>
@@ -221,7 +228,7 @@ function Component({ cardIds }: { cardIds: string[] }) {
   const cardGames = useOnGetMany(games, cardIds)
   return cardGames ? (
     <ul>
-      {cardGames.map((game) => (
+      {cardGames.map(game => (
         <li>{game.data.title}</li>
       ))}
     </ul>
@@ -272,7 +279,7 @@ function Component() {
   return switchGames ? (
     <div>
       <ul>
-        {switchGames.map((game) => (
+        {switchGames.map(game => (
           <li>{game.data.title}</li>
         ))}
       </ul>
@@ -314,7 +321,7 @@ function Component() {
   useInfiniteScroll(1.5, loadMore)
   return switchGames ? (
     <ul>
-      {switchGames.map((game) => (
+      {switchGames.map(game => (
         <li>{game.data.title}</li>
       ))}
     </ul>

@@ -7,6 +7,16 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## 4.0.0 - 2020-XX-XX
+
+### Changed
+
+- **BREAKING**: The hooks now return a tuple where the result is the first item, and the second is an object with loading and error states.
+
+### Added
+
+- `useGet` and `useOnGet` now accept references (i.e. `useGet(user.ref)`).
+
 ## 3.0.0 - 2020-04-17
 
 ### Changed

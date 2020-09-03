@@ -2,7 +2,17 @@ import * as testing from '@firebase/testing'
 import { renderHook } from '@testing-library/react-hooks'
 import assert from 'assert'
 import { nanoid } from 'nanoid'
-import { add, collection, Query, ref, set, where } from 'typesaurus'
+import {
+  add,
+  Collection,
+  collection,
+  limit,
+  Query,
+  Ref,
+  ref,
+  set,
+  where
+} from 'typesaurus'
 import { setApp } from 'typesaurus/testing'
 import useQuery from '.'
 import { lockDB } from '../../test/_lib/utils'
@@ -60,6 +70,42 @@ describe('useQuery', () => {
       'Sasha',
       'Tati'
     ])
+  })
+
+  it('cleans the data and refetch when the collection is changing', async () => {
+    const initialProps: { collection: Collection<any> } = {
+      collection: contacts
+    }
+    const { result, waitForNextUpdate, rerender } = renderHook(
+      ({ collection }) =>
+        useQuery(collection, [where('ownerId', '==', ownerId)]),
+      { initialProps }
+    )
+    assert(result.current[0] === undefined)
+    await waitForNextUpdate()
+    assert(result.current[0])
+    rerender({ collection: messages })
+    assert(result.current[0] === undefined)
+    await waitForNextUpdate()
+    assert(typeof result.current[0]![0].data.text === 'string')
+  })
+
+  it('cleans the data and refetch when the queries are changing', async () => {
+    const initialProps: {
+      queries: Query<Contact, keyof Contact>[]
+    } = { queries: [where('ownerId', '==', ownerId)] }
+    const { result, rerender, waitForNextUpdate } = renderHook(
+      ({ queries }) => useQuery(contacts, queries),
+      { initialProps }
+    )
+    assert(result.current[0] === undefined)
+    await waitForNextUpdate()
+    assert(result.current[0])
+    rerender({ queries: [where('name', '==', 'Sasha'), limit(1)] })
+    assert(result.current[0] === undefined)
+    await waitForNextUpdate()
+    assert(result.current[0]!.length === 1)
+    assert(result.current[0]![0].data.name === 'Sasha')
   })
 
   it('when the queries is undefined the hook waits for it', async () => {

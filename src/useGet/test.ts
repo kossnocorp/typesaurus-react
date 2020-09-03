@@ -1,7 +1,7 @@
 import * as testing from '@firebase/testing'
 import { renderHook } from '@testing-library/react-hooks'
 import assert from 'assert'
-import { add, collection, Ref } from 'typesaurus'
+import { add, Collection, collection, Ref, set } from 'typesaurus'
 import { setApp } from 'typesaurus/testing'
 import useGet from '.'
 import { lockDB } from '../../test/_lib/utils'
@@ -9,6 +9,7 @@ import { lockDB } from '../../test/_lib/utils'
 describe('useGet', () => {
   type User = { name: string }
   const users = collection<User>('users')
+  const altUsers = collection<User>('altUsers')
 
   beforeEach(async () => {
     setApp(testing.initializeAdminApp({ projectId: 'project-id' }))
@@ -39,6 +40,42 @@ describe('useGet', () => {
     assert(result.current[0] === undefined)
     await waitForNextUpdate()
     assert(result.current[0] === null)
+  })
+
+  it('cleans the data and refetch when the collection is changing', async () => {
+    const user = await add(users, { name: 'Sasha' })
+    await set(altUsers, user.id, { name: 'Alexander' })
+    const initialProps: { collection: Collection<any> } = { collection: users }
+    const { result, waitForNextUpdate, rerender } = renderHook(
+      ({ collection }) => useGet(collection, user.id),
+      { initialProps }
+    )
+    assert(result.current[0] === undefined)
+    await waitForNextUpdate()
+    assert(result.current[0])
+    rerender({ collection: altUsers })
+    assert(result.current[0] === undefined)
+    await waitForNextUpdate()
+    assert(result.current[0]!.data.name === 'Alexander')
+  })
+
+  it('cleans the data and refetch when the id is changing', async () => {
+    const [user, anotherUser] = await Promise.all([
+      add(users, { name: 'Sasha' }),
+      add(users, { name: 'Tati' })
+    ])
+    const initialProps: { id: string } = { id: user.id }
+    const { result, waitForNextUpdate, rerender } = renderHook(
+      ({ id }) => useGet(users, id),
+      { initialProps }
+    )
+    assert(result.current[0] === undefined)
+    await waitForNextUpdate()
+    assert(result.current[0])
+    rerender({ id: anotherUser.id })
+    assert(result.current[0] === undefined)
+    await waitForNextUpdate()
+    assert(result.current[0]!.data.name === 'Tati')
   })
 
   it('when the id is undefined the hook waits for it', async () => {

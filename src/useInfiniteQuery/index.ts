@@ -31,7 +31,7 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   const [loadedAll, setLoadedAll] = useState(false)
   const cursorsMap = useRef<InfiniteCursorsState>({})
   const cursorId = cursor?.ref.id || 'initial'
-  const loading = result === undefined
+  const loading = result === undefined && !error
 
   const sharedDeps = [JSON.stringify(collection), JSON.stringify(queries)]
 

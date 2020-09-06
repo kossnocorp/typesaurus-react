@@ -51,7 +51,7 @@ firebase.initializeApp({
 
 Use `useGet` hook to fetch document with the given id.
 
-```ts
+```tsx
 import React from 'react'
 import { useGet } from '@typesaurus/react'
 import { collection } from 'typesaurus'
@@ -74,7 +74,7 @@ function Component({ userId }: { userId: string }) {
 
 Use `useOnGet` hook to subscribe to a document with the given id. When the document changes you'll receive the new data automatically.
 
-```ts
+```tsx
 import React from 'react'
 import { useOnGet } from '@typesaurus/react'
 import { collection } from 'typesaurus'
@@ -83,8 +83,15 @@ type User = { name: string }
 const users = collection<User>('users')
 
 function Component({ userId }: { userId: string }) {
-  const user = useGet(users, userId)
-  return user ? <div>Hello, {user.data.name}</div> : <div>Loading...</div>
+  const [user, { loading, error }] = useOnGet(users, userId)
+
+  if (user) {
+    return <div>Hello, {user.data.name}</div>
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the user!</div>
+  }
 }
 ```
 
@@ -92,7 +99,7 @@ function Component({ userId }: { userId: string }) {
 
 Use `useAll` hook to fetch all documents from a collection.
 
-```ts
+```tsx
 import React from 'react'
 import { useAll } from '@typesaurus/react'
 import { collection } from 'typesaurus'
@@ -101,22 +108,27 @@ type User = { name: string }
 const users = collection<User>('users')
 
 function Component() {
-  const allUsers = useAll(users)
-  return allUsers ? (
-    <ul>
-      {allUsers.map(user => (
-        <li>{user.data.name}</li>
-      ))}
-    </ul>
-  ) : (
-    <div>Loading...</div>
-  )
+  const [allUsers, { loading, error }] = useAll(users)
+
+  if (allUsers) {
+    return (
+      <ul>
+        {allUsers.map(user => (
+          <li>{user.data.name}</li>
+        ))}
+      </ul>
+    )
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the users list!</div>
+  }
 }
 ```
 
 Use `useOnAll` hook to subscribe to all documents within a collection. When a document in the collection changes you'll receive the new data.
 
-```ts
+```tsx
 import React from 'react'
 import { useOnAll } from '@typesaurus/react'
 import { collection } from 'typesaurus'
@@ -125,16 +137,21 @@ type User = { name: string }
 const users = collection<User>('users')
 
 function Component() {
-  const allUsers = useOnAll(users)
-  return allUsers ? (
-    <ul>
-      {allUsers.map(user => (
-        <li>{user.data.name}</li>
-      ))}
-    </ul>
-  ) : (
-    <div>Loading...</div>
-  )
+  const [allUsers, { loading, error }] = useOnAll(users)
+
+  if (allUsers) {
+    return (
+      <ul>
+        {allUsers.map(user => (
+          <li>{user.data.name}</li>
+        ))}
+      </ul>
+    )
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the users list!</div>
+  }
 }
 ```
 
@@ -142,7 +159,7 @@ function Component() {
 
 Use `useQuery` hook to query documents from a collection using using query objects.
 
-```ts
+```tsx
 import React from 'react'
 import { useQuery } from '@typesaurus/react'
 import { collection, where } from 'typesaurus'
@@ -151,22 +168,29 @@ type Game = { title: string; platform: 'switch' | 'xbox' | 'ps' | 'pc' }
 const games = collection<Game>('games')
 
 function Component() {
-  const switchGames = useQuery(games, [where('platform', '==', 'switch')])
-  return switchGames ? (
-    <ul>
-      {switchGames.map(game => (
-        <li>{game.data.title}</li>
-      ))}
-    </ul>
-  ) : (
-    <div>Loading...</div>
-  )
+  const [switchGames, { loading, error }] = useQuery(games, [
+    where('platform', '==', 'switch')
+  ])
+
+  if (switchGames) {
+    return (
+      <ul>
+        {switchGames.map(game => (
+          <li>{game.data.title}</li>
+        ))}
+      </ul>
+    )
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the games list!</div>
+  }
 }
 ```
 
 Use `useOnQuery` hook to subscribe to a query results. When the result changes you'll receive the new data.
 
-```ts
+```tsx
 import React from 'react'
 import { useOnQuery } from '@typesaurus/react'
 import { collection, where } from 'typesaurus'
@@ -175,16 +199,23 @@ type Game = { title: string; platform: 'switch' | 'xbox' | 'ps' | 'pc' }
 const games = collection<Game>('games')
 
 function Component() {
-  const switchGames = useOnQuery(games, [where('platform', '==', 'switch')])
-  return switchGames ? (
-    <ul>
-      {switchGames.map(game => (
-        <li>{game.data.title}</li>
-      ))}
-    </ul>
-  ) : (
-    <div>Loading...</div>
-  )
+  const [switchGames, { loading, error }] = useOnQuery(games, [
+    where('platform', '==', 'switch')
+  ])
+
+  if (switchGames) {
+    return (
+      <ul>
+        {switchGames.map(game => (
+          <li>{game.data.title}</li>
+        ))}
+      </ul>
+    )
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the games list!</div>
+  }
 }
 ```
 
@@ -192,7 +223,7 @@ function Component() {
 
 Use `useGetMany` hook to fetch multiple documents by the given ids.
 
-```ts
+```tsx
 import React from 'react'
 import { useGetMany } from '@typesaurus/react'
 import { collection } from 'typesaurus'
@@ -201,22 +232,27 @@ type Game = { title: string; platform: 'switch' | 'xbox' | 'ps' | 'pc' }
 const games = collection<Game>('games')
 
 function Component({ cardIds }: { cardIds: string[] }) {
-  const cardGames = useGetMany(games, cardIds)
-  return cardGames ? (
-    <ul>
-      {cardGames.map(game => (
-        <li>{game.data.title}</li>
-      ))}
-    </ul>
-  ) : (
-    <div>Loading...</div>
-  )
+  const [cardGames, { loading, error }] = useGetMany(games, cardIds)
+
+  if (cardGames) {
+    return (
+      <ul>
+        {cardGames.map(game => (
+          <li>{game.data.title}</li>
+        ))}
+      </ul>
+    )
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the games list!</div>
+  }
 }
 ```
 
 Use `useOnGetMany` hook to subscribe to multiple documents by the given ids. When a document changes you'll receive the new data automatically.
 
-```ts
+```tsx
 import React from 'react'
 import { useOnGetMany } from '@typesaurus/react'
 import { collection } from 'typesaurus'
@@ -225,16 +261,21 @@ type Game = { title: string; platform: 'switch' | 'xbox' | 'ps' | 'pc' }
 const games = collection<Game>('games')
 
 function Component({ cardIds }: { cardIds: string[] }) {
-  const cardGames = useOnGetMany(games, cardIds)
-  return cardGames ? (
-    <ul>
-      {cardGames.map(game => (
-        <li>{game.data.title}</li>
-      ))}
-    </ul>
-  ) : (
-    <div>Loading...</div>
-  )
+  const [cardGames, { loading, error }] = useOnGetMany(games, cardIds)
+
+  if (cardGames) {
+    return (
+      <ul>
+        {cardGames.map(game => (
+          <li>{game.data.title}</li>
+        ))}
+      </ul>
+    )
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the games list!</div>
+  }
 }
 ```
 
@@ -257,7 +298,7 @@ Use `useInfiniteQuery` to query documents with pagination.
 
 The function returns an array where the first element is the result and the second is `loadMore`. `loadMore` is `undefined` when the result is loading. `loadMore` is `null` when there're no more data to load. Otherwise `loadMore` is a function that triggers loading of the next page.
 
-```ts
+```tsx
 import React from 'react'
 import { useInfiniteQuery } from '@typesaurus/react'
 import { collection, where } from 'typesaurus'
@@ -270,37 +311,41 @@ type Game = {
 const games = collection<Game>('games')
 
 function Component() {
-  const [switchGames, loadMore] = useInfiniteQuery(
+  const [switchGames, { loading, error, loadMore }] = useInfiniteQuery(
     games,
     [where('platform', '==', 'switch')],
-    { field: 'publishedAt', method: 'desc', limit: 10 }
+    { field: 'publishedAt', method: 'desc', limit: 9 }
   )
 
-  return switchGames ? (
-    <div>
-      <ul>
-        {switchGames.map(game => (
-          <li>{game.data.title}</li>
-        ))}
-      </ul>
+  if (switchGames) {
+    return (
+      <div>
+        <ul>
+          {switchGames.map(game => (
+            <li>{game.data.title}</li>
+          ))}
+        </ul>
 
-      {loadMore === undefined ? (
-        <div>Loading more...</div>
-      ) : loadMore === null ? null : (
-        <button onClick={loadMore}>Load more</button>
-      )}
-    </div>
-  ) : (
-    <div>Loading...</div>
-  )
+        {loadMore === undefined ? (
+          <div>Loading more...</div>
+        ) : loadMore === null ? null : (
+          <button onClick={loadMore}>Load more</button>
+        )}
+      </div>
+    )
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the games list!</div>
+  }
 }
 ```
 
 Combine `useInfiniteQuery` with `useInfiniteScroll` to implement the infinite scroll.
 
-`useInfiniteScroll` accepts two arguments. The first is the scroll threshold. If you pass `1.5`, then more results will load when the scroll position is more than full height minus 1.5 x screen height. The second argument is `loadMore` function returned from `useInfiniteQuery`.
+`useInfiniteScroll` accepts two arguments. The first is the scroll threshold. If you pass `0.5`, then more results will load when the scroll position is more than full height minus 1.5 x screen height. The second argument is `loadMore` function returned from `useInfiniteQuery`.
 
-```ts
+```tsx
 import React from 'react'
 import { useInfiniteQuery, useInfiniteScroll } from '@typesaurus/react'
 import { collection, where } from 'typesaurus'
@@ -313,21 +358,26 @@ type Game = {
 const games = collection<Game>('games')
 
 function Component() {
-  const [switchGames, loadMore] = useInfiniteQuery(
+  const [switchGames, { loading, error, loadMore }] = useInfiniteQuery(
     games,
     [where('platform', '==', 'switch')],
-    { field: 'publishedAt', method: 'desc', limit: 10 }
+    { field: 'publishedAt', method: 'desc', limit: 9 }
   )
-  useInfiniteScroll(1.5, loadMore)
-  return switchGames ? (
-    <ul>
-      {switchGames.map(game => (
-        <li>{game.data.title}</li>
-      ))}
-    </ul>
-  ) : (
-    <div>Loading...</div>
-  )
+  useInfiniteScroll(0.5, loadMore)
+
+  if (switchGames) {
+    return (
+      <ul>
+        {switchGames.map(game => (
+          <li>{game.data.title}</li>
+        ))}
+      </ul>
+    )
+  } else if (loading) {
+    return <div>Loading...</div>
+  } else if (error) {
+    return <div>Failed to load the games list!</div>
+  }
 }
 ```
 

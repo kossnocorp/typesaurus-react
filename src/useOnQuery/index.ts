@@ -13,7 +13,7 @@ export default function useOnQuery<Model>(
 > {
   const [result, setResult] = useState<Doc<Model>[] | undefined>(undefined)
   const [error, setError] = useState<unknown>(undefined)
-  const loading = result === undefined
+  const loading = result === undefined && !error
 
   const deps = [JSON.stringify(collection), JSON.stringify(queries)]
   useEffect(() => {

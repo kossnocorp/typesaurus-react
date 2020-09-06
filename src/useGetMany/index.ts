@@ -7,6 +7,7 @@ import { TypesaurusHookResult } from '../types'
 export default function useGetMany<Model>(
   collection: Collection<Model>,
   ids: readonly string[] | undefined,
+  // TODO: Import type from typesaurus
   onMissing: ((id: string) => Model) | 'ignore' = id => {
     throw new Error(`Missing document with id ${id}`)
   }

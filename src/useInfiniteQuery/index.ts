@@ -18,7 +18,7 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   queries: Query<Model, keyof Model>[] | undefined,
   options: InfiniteQueryOptions<FieldName>
 ): TypesaurusHookResult<
-  typeof queries extends undefined ? undefined : Doc<Model>[],
+  typeof queries extends undefined ? undefined : Doc<Model>[] | undefined,
   {
     loadMore: typeof queries extends undefined
       ? undefined

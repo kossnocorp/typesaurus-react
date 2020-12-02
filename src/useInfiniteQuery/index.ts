@@ -25,6 +25,11 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
       : InfiniteLoadMoreState
   }
 > {
+  const collectionRef = useRef<
+    Collection<Model> | CollectionGroup<Model> | undefined
+  >(undefined)
+  const queriesRef = useRef<Query<Model, keyof Model>[] | undefined>(undefined)
+  const [refsChanged, setRefsChanged] = useState(0)
   const [result, setResult] = useState<Doc<Model>[] | undefined>(undefined)
   const [error, setError] = useState<unknown>(undefined)
   const [cursor, setCursor] = useState<Doc<Model> | undefined>(undefined)
@@ -33,34 +38,70 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   const cursorId = cursor?.ref.id || 'initial'
   const loading = result === undefined && !error
 
-  const sharedDeps = [JSON.stringify(collection), JSON.stringify(queries)]
+  const queryKey = JSON.stringify([collection, queries])
+  const queryKeyFromRef = JSON.stringify([
+    collectionRef.current,
+    queriesRef.current
+  ])
 
+  // Reset valus when collection or queries change
   useEffect(() => {
-    if (result) setResult(undefined)
-  }, sharedDeps)
+    if (queryKey === queryKeyFromRef) return
+    collectionRef.current = collection
+    queriesRef.current = queries
+    setRefsChanged(Date.now())
+    setResult(undefined)
+    setError(undefined)
+    setCursor(undefined)
+    setLoadedAll(false)
+    cursorsMap.current = {}
+  }, [queryKey, queryKeyFromRef])
 
-  const deps = sharedDeps.concat(cursorId)
+  const deps = [refsChanged, queryKey, queryKeyFromRef, cursorId]
   useEffect(() => {
-    if (queries && cursorsMap.current[cursorId] === undefined) {
-      cursorsMap.current[cursorId] = 'loading'
-      query(
-        collection,
-        queries.concat([
-          order(
-            options.field,
-            options.method || 'asc',
-            cursor ? [startAfter(cursor)] : []
-          ),
-          limit(options.limit)
-        ])
-      )
-        .then(newResult => {
-          cursorsMap.current[cursorId] = 'loaded'
-          if (newResult.length === 0 || newResult.length < options.limit)
-            setLoadedAll(true)
-          setResult((result || []).concat(newResult))
-        })
-        .catch(setError)
+    let unmounted = false
+
+    // Skip update if collection or queries are missing, update pending or
+    // already processing.
+    const propsUpdatePending = queryKey !== queryKeyFromRef
+    const alreadyProcessing = cursorsMap.current[cursorId] !== undefined
+    if (
+      !collectionRef.current ||
+      !queriesRef.current ||
+      propsUpdatePending ||
+      alreadyProcessing
+    ) {
+      return
+    }
+
+    cursorsMap.current[cursorId] = 'loading'
+    // console.log('+++ requesting', queryKey)
+    query(
+      collectionRef.current,
+      queriesRef.current.concat([
+        order(
+          options.field,
+          options.method || 'asc',
+          cursor ? [startAfter(cursor)] : []
+        ),
+        limit(options.limit)
+      ])
+    )
+      .then(newResult => {
+        if (unmounted) return
+        cursorsMap.current[cursorId] = 'loaded'
+        if (newResult.length === 0 || newResult.length < options.limit)
+          setLoadedAll(true)
+        // console.log('>>> got result')
+        setResult((result || []).concat(newResult))
+      })
+      .catch(err => {
+        if (unmounted) return
+        setError(err)
+      })
+
+    return () => {
+      unmounted = true
     }
   }, deps)
 

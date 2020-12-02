@@ -7,6 +7,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## 4.0.1 - 2020-09-10
+
+### Fixed
+
+- Fixed `useInfiniteQuery` behavior when the collection or query are changing. Before, the previous result would not be cleared.
+
 ## 4.0.0 - 2020-09-06
 
 ### Changed

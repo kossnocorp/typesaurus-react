@@ -8,7 +8,7 @@ test:
 .PHONY: test
 
 test-watch:
-	${BIN}/firebase emulators:exec --only firestore "${BIN}/jest --env node --watch"
+	${BIN}/firebase emulators:exec --only firestore "${BIN}/jest --env node --watch --runInBand"
 
 test-setup:
 	${BIN}/firebase setup:emulators:firestore
@@ -31,7 +31,8 @@ build:
 	@rm -rf lib
 	@${BIN}/tsc --project tsconfig.lib.json
 	@${BIN}/prettier "lib/**/*.[jt]s" --write --loglevel silent
-	@cp {package.json,*.md} lib/reactopod
+	@cp package.json lib/reactopod
+	@cp *.md lib/reactopod
 	@rsync --archive --prune-empty-dirs --exclude '*.ts' --relative src/./ lib/reactopod
 	@${BIN}/tsc --project tsconfig.lib.json --outDir lib/reactopod/esm --module es2020 --target es2019
 	@cp src/adaptor/package.json lib/reactopod/esm/adaptor/package.json

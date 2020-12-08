@@ -13,3 +13,8 @@ export type InfiniteQueryOptions<Field> = {
 export type InfiniteCursorsState = {
   [cursorId: string]: 'loading' | 'loaded'
 }
+
+export type InfiniteQueryHookResultMeta = {
+  loadMore: InfiniteLoadMoreState
+  loadedAll: boolean
+}

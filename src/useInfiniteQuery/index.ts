@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from '../adaptor'
 import { TypesaurusHookResult } from '../types'
 import {
   InfiniteCursorsState,
-  InfiniteLoadMoreState,
+  InfiniteQueryHookResultMeta,
   InfiniteQueryOptions
 } from '../_lib/infinite'
 
@@ -17,65 +17,103 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   collection: Collection<Model> | CollectionGroup<Model>,
   queries: Query<Model, keyof Model>[] | undefined,
   options: InfiniteQueryOptions<FieldName>
-): TypesaurusHookResult<
-  typeof queries extends undefined ? undefined : Doc<Model>[] | undefined,
-  {
-    loadMore: typeof queries extends undefined
-      ? undefined
-      : InfiniteLoadMoreState
-  }
-> {
+): TypesaurusHookResult<Doc<Model>[] | undefined, InfiniteQueryHookResultMeta> {
+  // The props (collection and queries) might change, or in case of queries,
+  // be undefined. When they change, all the result state must be reset.
+  // When queries is undefined, any requests must be delayed.
+  //
+  // Since there are plenty of moving parts, these props sync via references
+  // that update in an effect.
+
+  // The props references.
   const collectionRef = useRef<
     Collection<Model> | CollectionGroup<Model> | undefined
   >(undefined)
   const queriesRef = useRef<Query<Model, keyof Model>[] | undefined>(undefined)
-  const [refsChanged, setRefsChanged] = useState(0)
-  const [result, setResult] = useState<Doc<Model>[] | undefined>(undefined)
-  const [error, setError] = useState<unknown>(undefined)
-  const [cursor, setCursor] = useState<Doc<Model> | undefined>(undefined)
-  const [loadedAll, setLoadedAll] = useState(false)
-  const cursorsMap = useRef<InfiniteCursorsState>({})
-  const cursorId = cursor?.ref.id || 'initial'
-  const loading = result === undefined && !error
-
+  // The state that updates when the props references change
+  const [, setPropsRefsChanged] = useState(0)
+  // The props keys to be used in effects.
   const queryKey = JSON.stringify([collection, queries])
   const queryKeyFromRef = JSON.stringify([
     collectionRef.current,
     queriesRef.current
   ])
 
-  // Reset valus when collection or queries change
+  // The cursor state.
+  //
+  // The cursor used to define the currently loading collection chunk.
+  // It updates when the next page is requested.
+  const [cursor, setCursor] = useState<Doc<Model> | undefined>(undefined)
+  // The current cursor id
+  const cursorId = cursor?.ref.id || 'initial'
+  // Defines the cursor state: never requested, loading or loaded.
+  const cursorStatesRef = useRef<InfiniteCursorsState>({})
+  const [, setCursorStatesChanged] = useState(-1)
+
+  // The state exposed to the user
+  //
+  // The final result state.
+  const [result, setResult] = useState<Doc<Model>[] | undefined>(undefined)
+  // The error state.
+  const [error, setError] = useState<unknown>(undefined)
+  // True if the query is loaded till the very end.
+  const [loadedAll, setLoadedAll] = useState(false)
+  // True if there's a request currently loading or the initial query
+  // wasn't requested.
+  const cursorValues = Object.values(cursorStatesRef.current)
+  const loading =
+    (cursorValues.length === 0 || !!cursorValues.find(c => c === 'loading')) &&
+    !error
+  // The function used to trigger a request for the next page.
+  const loadMore = loadedAll
+    ? null
+    : result && cursorStatesRef.current[cursorId] === 'loaded'
+    ? () => setCursor(result[result.length - 1])
+    : undefined
+
+  // Sync the props references and reset the state when they change
   useEffect(() => {
+    // Ignore if the props references are in sync
     if (queryKey === queryKeyFromRef) return
+
+    // Sync the props references
     collectionRef.current = collection
     queriesRef.current = queries
-    setRefsChanged(Date.now())
+    setPropsRefsChanged(Date.now())
+
+    // Reset the cursors
+    setCursor(undefined)
+    cursorStatesRef.current = {}
+    setCursorStatesChanged(Date.now())
+
+    // Reset the exposed state
     setResult(undefined)
     setError(undefined)
-    setCursor(undefined)
     setLoadedAll(false)
-    cursorsMap.current = {}
   }, [queryKey, queryKeyFromRef])
 
-  const deps = [refsChanged, queryKey, queryKeyFromRef, cursorId]
+  // Query the current cursor.
   useEffect(() => {
-    let unmounted = false
+    // Skip update if the props references sync is pending, queries is missing,
+    // or the cursor is already processing.
+    const propsInSync = queryKey === queryKeyFromRef
+    const alreadyProcessing = cursorStatesRef.current[cursorId] !== undefined
 
-    // Skip update if collection or queries are missing, update pending or
-    // already processing.
-    const propsUpdatePending = queryKey !== queryKeyFromRef
-    const alreadyProcessing = cursorsMap.current[cursorId] !== undefined
     if (
       !collectionRef.current ||
       !queriesRef.current ||
-      propsUpdatePending ||
+      !propsInSync ||
       alreadyProcessing
-    ) {
+    )
       return
-    }
 
-    cursorsMap.current[cursorId] = 'loading'
-    // console.log('+++ requesting', queryKey)
+    // Maintain the mounted state and ignore results if unmounted.
+    let unmounted = false
+
+    // Mark the current cursor as loading
+    cursorStatesRef.current[cursorId] = 'loading'
+    setCursorStatesChanged(Date.now())
+
     query(
       collectionRef.current,
       queriesRef.current.concat([
@@ -89,29 +127,28 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
     )
       .then(newResult => {
         if (unmounted) return
-        cursorsMap.current[cursorId] = 'loaded'
+
+        // Mark the current cursor as loaded
+        cursorStatesRef.current[cursorId] = 'loaded'
+        setCursorStatesChanged(Date.now())
+
+        // If the result is empty or less than the requested size,
+        // then consider the query fully loaded
         if (newResult.length === 0 || newResult.length < options.limit)
           setLoadedAll(true)
-        // console.log('>>> got result')
+
+        // Add the requested chunk to the result
         setResult((result || []).concat(newResult))
       })
-      .catch(err => {
+      .catch(error => {
         if (unmounted) return
-        setError(err)
+        setError(error)
       })
 
     return () => {
       unmounted = true
     }
-  }, deps)
+  }, [queryKey, queryKeyFromRef, cursorId])
 
-  const loadMore = loadedAll
-    ? null
-    : result && cursorsMap.current[cursorId] === 'loaded'
-    ? () => {
-        setCursor(result[result.length - 1])
-      }
-    : undefined
-
-  return [result, { loading, error, loadMore }]
+  return [result, { loading, loadedAll, error, loadMore }]
 }

@@ -8,7 +8,7 @@ test:
 .PHONY: test
 
 test-watch:
-	${BIN}/firebase emulators:exec --only firestore "${BIN}/jest --env node --watch --runInBand"
+	${BIN}/firebase emulators:exec --only firestore "${BIN}/jest --env node --watch --detectOpenHandles"
 
 test-setup:
 	${BIN}/firebase setup:emulators:firestore

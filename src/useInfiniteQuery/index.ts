@@ -48,7 +48,7 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   const cursorId = cursor?.ref.id || 'initial'
   // Defines the cursor state: never requested, loading or loaded.
   const cursorStatesRef = useRef<InfiniteCursorsState>({})
-  const [, setCursorStatesChanged] = useState(-1)
+  const [, setCursorStatesChanged] = useState(0)
 
   // The state exposed to the user
   //
@@ -81,7 +81,7 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
     queriesRef.current = queries
     setPropsRefsChanged(Date.now())
 
-    // Reset the cursors
+    // Reset the cursor state
     setCursor(undefined)
     cursorStatesRef.current = {}
     setCursorStatesChanged(Date.now())
@@ -98,7 +98,6 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
     // or the cursor is already processing.
     const propsInSync = queryKey === queryKeyFromRef
     const alreadyProcessing = cursorStatesRef.current[cursorId] !== undefined
-
     if (
       !collectionRef.current ||
       !queriesRef.current ||
@@ -150,5 +149,5 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
     }
   }, [queryKey, queryKeyFromRef, cursorId])
 
-  return [result, { loading, loadedAll, error, loadMore }]
+  return [result, { loading, loadedAll, loadMore, error }]
 }

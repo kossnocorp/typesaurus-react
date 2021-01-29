@@ -1,6 +1,7 @@
+import { ServerTimestampsStrategy } from 'typesaurus/adaptor/types'
 import all from 'typesaurus/all'
 import { Collection } from 'typesaurus/collection'
-import { Doc } from 'typesaurus/doc'
+import { AnyDoc, DocOptions } from 'typesaurus/doc'
 import { useEffect, useState } from '../adaptor'
 import { TypesaurusHookResult } from '../types'
 
@@ -29,17 +30,25 @@ import { TypesaurusHookResult } from '../types'
  * @param collection - The collection to get all documents from
  * @returns A promise to all documents
  */
-export default function useAll<Model>(
-  collection: Collection<Model>
-): TypesaurusHookResult<Doc<Model>[] | undefined> {
-  const [result, setResult] = useState<Doc<Model>[] | undefined>(undefined)
+export default function useAll<
+  Model,
+  ServerTimestamps extends ServerTimestampsStrategy
+>(
+  collection: Collection<Model>,
+  options?: DocOptions<ServerTimestamps>
+): TypesaurusHookResult<
+  AnyDoc<Model, boolean, ServerTimestamps>[] | undefined
+> {
+  const [result, setResult] = useState<
+    AnyDoc<Model, boolean, ServerTimestamps>[] | undefined
+  >(undefined)
   const [error, setError] = useState<unknown>(undefined)
   const loading = result === undefined && !error
 
   const deps = [JSON.stringify(collection)]
   useEffect(() => {
     if (result) setResult(undefined)
-    all(collection).then(setResult).catch(setError)
+    all(collection, options).then(setResult).catch(setError)
   }, deps)
 
   return [result, { loading, error }]

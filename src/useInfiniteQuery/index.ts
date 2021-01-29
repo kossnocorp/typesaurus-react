@@ -1,6 +1,7 @@
+import { ServerTimestampsStrategy } from 'typesaurus/adaptor/types'
 import { Collection } from 'typesaurus/collection'
 import { startAfter } from 'typesaurus/cursor'
-import { Doc } from 'typesaurus/doc'
+import { AnyDoc, DocOptions } from 'typesaurus/doc'
 import { CollectionGroup } from 'typesaurus/group'
 import { limit } from 'typesaurus/limit'
 import { order } from 'typesaurus/order'
@@ -13,11 +14,18 @@ import {
   InfiniteQueryOptions
 } from '../_lib/infinite'
 
-export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
+export default function useInfiniteQuery<
+  Model,
+  FieldName extends keyof Model,
+  ServerTimestamps extends ServerTimestampsStrategy
+>(
   collection: Collection<Model> | CollectionGroup<Model>,
   queries: Query<Model, keyof Model>[] | undefined,
-  options: InfiniteQueryOptions<FieldName>
-): TypesaurusHookResult<Doc<Model>[] | undefined, InfiniteQueryHookResultMeta> {
+  options: InfiniteQueryOptions<FieldName> & DocOptions<ServerTimestamps>
+): TypesaurusHookResult<
+  AnyDoc<Model, boolean, ServerTimestamps>[] | undefined,
+  InfiniteQueryHookResultMeta
+> {
   // The props (collection and queries) might change, or in case of queries,
   // be undefined. When they change, all the result state must be reset.
   // When queries is undefined, any requests must be delayed.
@@ -43,7 +51,9 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   //
   // The cursor used to define the currently loading collection chunk.
   // It updates when the next page is requested.
-  const [cursor, setCursor] = useState<Doc<Model> | undefined>(undefined)
+  const [cursor, setCursor] = useState<
+    AnyDoc<Model, boolean, ServerTimestamps> | undefined
+  >(undefined)
   // The current cursor id
   const cursorId = cursor?.ref.id || 'initial'
   // Defines the cursor state: never requested, loading or loaded.
@@ -53,7 +63,9 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
   // The state exposed to the user
   //
   // The final result state.
-  const [result, setResult] = useState<Doc<Model>[] | undefined>(undefined)
+  const [result, setResult] = useState<
+    AnyDoc<Model, boolean, ServerTimestamps>[] | undefined
+  >(undefined)
   // The error state.
   const [error, setError] = useState<unknown>(undefined)
   // True if the query is loaded till the very end.
@@ -122,7 +134,8 @@ export default function useInfiniteQuery<Model, FieldName extends keyof Model>(
           cursor ? [startAfter(cursor)] : []
         ),
         limit(options.limit)
-      ])
+      ]),
+      options
     )
       .then(newResult => {
         if (unmounted) return

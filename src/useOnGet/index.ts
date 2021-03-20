@@ -57,7 +57,9 @@ export default function useOnGet<
     const ref = collectionOrRef as Ref<Model> | undefined
     collection = ref?.collection
     id = ref?.id
-    options = maybeIdOrOptions as DocOptions<ServerTimestamps> | undefined
+    options = maybeIdOrOptions as
+      | OnGetOptions<Environment, ServerTimestamps>
+      | undefined
   }
 
   const [result, setResult] = useState<Doc<Model> | null | undefined>(undefined)

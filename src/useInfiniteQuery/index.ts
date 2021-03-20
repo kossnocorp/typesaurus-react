@@ -4,8 +4,12 @@ import { AnyDoc } from 'typesaurus/doc'
 import { CollectionGroup } from 'typesaurus/group'
 import { limit } from 'typesaurus/limit'
 import { order } from 'typesaurus/order'
-import { query, Query, QueryOptions } from 'typesaurus/query'
-import { RuntimeEnvironment, ServerTimestampsStrategy } from 'typesaurus/types'
+import { query, QueryOptions } from 'typesaurus/query'
+import {
+  Query,
+  RuntimeEnvironment,
+  ServerTimestampsStrategy
+} from 'typesaurus/types'
 import { useEffect, useRef, useState } from '../adaptor'
 import { TypesaurusHookResult } from '../types'
 import {

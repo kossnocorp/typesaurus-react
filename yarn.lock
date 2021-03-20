@@ -10668,10 +10668,10 @@ typedoc@^0.16.2:
     typedoc-default-themes "^0.7.0"
     typescript "3.7.x"
 
-typesaurus@8.0.0-alpha.4:
-  version "8.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/typesaurus/-/typesaurus-8.0.0-alpha.4.tgz#e92bc959719f2f243205f4f59cad61cf4f38357c"
-  integrity sha512-jodvi7MLl+Oj2oZ7RTCO69Q7q/PvmDgRiNFz0D4POZ+qTLId4HFX65UiQcXGW8jB2tQQYApNNR3cTmQNzzlsZg==
+typesaurus@8.0.0-alpha.22:
+  version "8.0.0-alpha.22"
+  resolved "https://registry.yarnpkg.com/typesaurus/-/typesaurus-8.0.0-alpha.22.tgz#1471fb59163b5b422d0dd97a4e3336aa42fd0b8f"
+  integrity sha512-klrpjaOGa119fQAhvdgjjH28lBiyCZeR+T7hd/afHgx1YITOh3bFz9rG+lEEaU3wHr0TeZGOWzHiAoMetP8pnA==
 
 typescript@3.7.x:
   version "3.7.4"

@@ -1,20 +1,21 @@
-import { useEffect, useState } from '../adaptor'
 import { Collection } from 'typesaurus/collection'
-import { Doc, DocOptions } from 'typesaurus/doc'
-import onGet from 'typesaurus/onGet'
+import { Doc } from 'typesaurus/doc'
+import { onGet, OnGetOptions } from 'typesaurus/onGet'
+import { Ref } from 'typesaurus/ref'
+import { RuntimeEnvironment, ServerTimestampsStrategy } from 'typesaurus/types'
+import { useEffect, useState } from '../adaptor'
 import { TypesaurusHookResult } from '../types'
-import { Ref } from 'typesaurus'
-import { ServerTimestampsStrategy } from 'typesaurus/adaptor/types'
 
 /**
  * @param ref - The reference to the document
  */
 export default function useOnGet<
   Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
   ref: Ref<Model> | undefined,
-  options?: DocOptions<ServerTimestamps>
+  options?: OnGetOptions<Environment, ServerTimestamps>
 ): TypesaurusHookResult<
   typeof ref extends undefined ? undefined : Doc<Model> | null | undefined
 >
@@ -25,26 +26,28 @@ export default function useOnGet<
  */
 export default function useOnGet<
   Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
   collection: Collection<Model>,
   id: string | undefined,
-  options?: DocOptions<ServerTimestamps>
+  options?: OnGetOptions<Environment, ServerTimestamps>
 ): TypesaurusHookResult<
   typeof id extends undefined ? undefined : Doc<Model> | null | undefined
 >
 
 export default function useOnGet<
   Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
   collectionOrRef: Collection<Model> | Ref<Model> | undefined,
-  maybeIdOrOptions?: string | DocOptions<ServerTimestamps>,
-  maybeOptions?: DocOptions<ServerTimestamps>
+  maybeIdOrOptions?: string | OnGetOptions<Environment, ServerTimestamps>,
+  maybeOptions?: OnGetOptions<Environment, ServerTimestamps>
 ) {
   let collection: Collection<Model> | undefined
   let id: string | undefined
-  let options: DocOptions<ServerTimestamps> | undefined
+  let options: OnGetOptions<Environment, ServerTimestamps> | undefined
 
   if (collectionOrRef && collectionOrRef.__type__ === 'collection') {
     collection = collectionOrRef as Collection<Model>

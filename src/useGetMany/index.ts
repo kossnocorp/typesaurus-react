@@ -1,27 +1,25 @@
-import { ServerTimestampsStrategy } from 'typesaurus/adaptor/types'
 import { Collection } from 'typesaurus/collection'
-import { AnyDoc, DocOptions } from 'typesaurus/doc'
-import getMany, { OnMissing } from 'typesaurus/getMany'
+import { AnyDoc } from 'typesaurus/doc'
+import { getMany, GetManyOptions } from 'typesaurus/getMany'
+import { RuntimeEnvironment, ServerTimestampsStrategy } from 'typesaurus/types'
 import { useEffect, useState } from '../adaptor'
 import { TypesaurusHookResult } from '../types'
 
 export default function useGetMany<
   Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
   collection: Collection<Model>,
   ids: readonly string[] | undefined,
-  // TODO: Import OnMissingOptions from next versions
-  options: DocOptions<ServerTimestamps> & {
-    onMissing?: OnMissing<Model>
-  } = {}
+  options?: GetManyOptions<Model, Environment, ServerTimestamps>
 ): TypesaurusHookResult<
   typeof ids extends undefined
     ? undefined
-    : AnyDoc<Model, boolean, ServerTimestamps>[] | undefined
+    : AnyDoc<Model, Environment, boolean, ServerTimestamps>[] | undefined
 > {
   const [result, setResult] = useState<
-    AnyDoc<Model, boolean, ServerTimestamps>[] | undefined
+    AnyDoc<Model, Environment, boolean, ServerTimestamps>[] | undefined
   >(undefined)
   const [error, setError] = useState<unknown>(undefined)
   const loading = result === undefined && !error

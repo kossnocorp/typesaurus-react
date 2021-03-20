@@ -1,11 +1,11 @@
-import { ServerTimestampsStrategy } from 'typesaurus/adaptor/types'
 import { Collection } from 'typesaurus/collection'
 import { startAfter } from 'typesaurus/cursor'
-import { AnyDoc, DocOptions } from 'typesaurus/doc'
+import { AnyDoc } from 'typesaurus/doc'
 import { CollectionGroup } from 'typesaurus/group'
 import { limit } from 'typesaurus/limit'
 import { order } from 'typesaurus/order'
-import { query, Query } from 'typesaurus/query'
+import { query, Query, QueryOptions } from 'typesaurus/query'
+import { RuntimeEnvironment, ServerTimestampsStrategy } from 'typesaurus/types'
 import { useEffect, useRef, useState } from '../adaptor'
 import { TypesaurusHookResult } from '../types'
 import {
@@ -17,13 +17,15 @@ import {
 export default function useInfiniteQuery<
   Model,
   FieldName extends keyof Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
   collection: Collection<Model> | CollectionGroup<Model>,
   queries: Query<Model, keyof Model>[] | undefined,
-  options: InfiniteQueryOptions<FieldName> & DocOptions<ServerTimestamps>
+  options: InfiniteQueryOptions<FieldName> &
+    QueryOptions<Environment, ServerTimestamps>
 ): TypesaurusHookResult<
-  AnyDoc<Model, boolean, ServerTimestamps>[] | undefined,
+  AnyDoc<Model, Environment, boolean, ServerTimestamps>[] | undefined,
   InfiniteQueryHookResultMeta
 > {
   // The props (collection and queries) might change, or in case of queries,
@@ -52,7 +54,7 @@ export default function useInfiniteQuery<
   // The cursor used to define the currently loading collection chunk.
   // It updates when the next page is requested.
   const [cursor, setCursor] = useState<
-    AnyDoc<Model, boolean, ServerTimestamps> | undefined
+    AnyDoc<Model, Environment, boolean, ServerTimestamps> | undefined
   >(undefined)
   // The current cursor id
   const cursorId = cursor?.ref.id || 'initial'
@@ -64,7 +66,7 @@ export default function useInfiniteQuery<
   //
   // The final result state.
   const [result, setResult] = useState<
-    AnyDoc<Model, boolean, ServerTimestamps>[] | undefined
+    AnyDoc<Model, Environment, boolean, ServerTimestamps>[] | undefined
   >(undefined)
   // The error state.
   const [error, setError] = useState<unknown>(undefined)

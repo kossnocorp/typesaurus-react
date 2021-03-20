@@ -1,23 +1,25 @@
 import type { Ref } from 'typesaurus/ref'
 import type { Collection } from 'typesaurus/collection'
-import type { AnyDoc, Doc, DocOptions } from 'typesaurus/doc'
-import get from 'typesaurus/get'
+import type { AnyDoc, Doc } from 'typesaurus/doc'
+import { get, GetOptions } from 'typesaurus/get'
 import { useEffect, useState } from '../adaptor'
 import { TypesaurusHookResult } from '../types'
-import { ServerTimestampsStrategy } from 'typesaurus/adaptor/types'
+import { RuntimeEnvironment, ServerTimestampsStrategy } from 'typesaurus/types'
 
 /**
  * @param ref - The reference to the document
  */
 export default function useGet<
   Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
-  ref: Ref<Model> | undefined
+  ref: Ref<Model> | undefined,
+  options?: GetOptions<Environment, ServerTimestamps>
 ): TypesaurusHookResult<
   typeof ref extends undefined
     ? undefined
-    : AnyDoc<Model, boolean, ServerTimestamps> | null | undefined
+    : AnyDoc<Model, Environment, boolean, ServerTimestamps> | null | undefined
 >
 
 /**
@@ -26,27 +28,30 @@ export default function useGet<
  */
 export default function useGet<
   Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
   collection: Collection<Model>,
-  id: string | undefined
+  id: string | undefined,
+  options?: GetOptions<Environment, ServerTimestamps>
 ): TypesaurusHookResult<
   typeof id extends undefined
     ? undefined
-    : AnyDoc<Model, boolean, ServerTimestamps> | null | undefined
+    : AnyDoc<Model, Environment, boolean, ServerTimestamps> | null | undefined
 >
 
 export default function useGet<
   Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
   collectionOrRef: Collection<Model> | Ref<Model> | undefined,
-  maybeIdOrOptions?: string | DocOptions<ServerTimestamps>,
-  maybeOptions?: DocOptions<ServerTimestamps>
+  maybeIdOrOptions?: string | GetOptions<Environment, ServerTimestamps>,
+  maybeOptions?: GetOptions<Environment, ServerTimestamps>
 ) {
   let collection: Collection<Model> | undefined
   let id: string | undefined
-  let options: DocOptions<ServerTimestamps> | undefined
+  let options: GetOptions<Environment, ServerTimestamps> | undefined
 
   if (collectionOrRef && collectionOrRef.__type__ === 'collection') {
     collection = collectionOrRef as Collection<Model>
@@ -56,7 +61,9 @@ export default function useGet<
     const ref = collectionOrRef as Ref<Model> | undefined
     collection = ref?.collection
     id = ref?.id
-    options = maybeIdOrOptions as DocOptions<ServerTimestamps> | undefined
+    options = maybeIdOrOptions as
+      | GetOptions<Environment, ServerTimestamps>
+      | undefined
   }
 
   const [result, setResult] = useState<Doc<Model> | null | undefined>(undefined)

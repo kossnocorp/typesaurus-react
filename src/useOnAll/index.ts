@@ -1,21 +1,22 @@
-import { ServerTimestampsStrategy } from 'typesaurus/adaptor/types'
 import { Collection } from 'typesaurus/collection'
-import { AnyDoc, DocOptions } from 'typesaurus/doc'
-import onAll from 'typesaurus/onAll'
+import { AnyDoc } from 'typesaurus/doc'
+import { onAll, OnAllOptions } from 'typesaurus/onAll'
+import { RuntimeEnvironment, ServerTimestampsStrategy } from 'typesaurus/types'
 import { useEffect, useState } from '../adaptor'
 import { TypesaurusHookResult } from '../types'
 
 export default function useOnAll<
   Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
   collection: Collection<Model>,
-  options?: DocOptions<ServerTimestamps>
+  options?: OnAllOptions<Environment, ServerTimestamps>
 ): TypesaurusHookResult<
-  AnyDoc<Model, boolean, ServerTimestamps>[] | undefined
+  AnyDoc<Model, Environment, boolean, ServerTimestamps>[] | undefined
 > {
   const [result, setResult] = useState<
-    AnyDoc<Model, boolean, ServerTimestamps>[] | undefined
+    AnyDoc<Model, Environment, boolean, ServerTimestamps>[] | undefined
   >(undefined)
   const [error, setError] = useState<unknown>(undefined)
   const loading = result === undefined && !error

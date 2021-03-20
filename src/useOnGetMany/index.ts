@@ -1,17 +1,19 @@
-import { ServerTimestampsStrategy } from 'typesaurus/adaptor/types'
 import { Collection } from 'typesaurus/collection'
-import { Doc, DocOptions } from 'typesaurus/doc'
-import onGetMany from 'typesaurus/onGetMany'
+import { Doc } from 'typesaurus/doc'
+import { OnGetOptions } from 'typesaurus/onGet'
+import { onGetMany } from 'typesaurus/onGetMany'
+import { RuntimeEnvironment, ServerTimestampsStrategy } from 'typesaurus/types'
 import { useEffect, useState } from '../adaptor'
 import { TypesaurusHookResult } from '../types'
 
 export default function useOnGetMany<
   Model,
+  Environment extends RuntimeEnvironment | undefined,
   ServerTimestamps extends ServerTimestampsStrategy
 >(
   collection: Collection<Model>,
   ids: readonly string[] | undefined,
-  options?: DocOptions<ServerTimestamps>
+  options?: OnGetOptions<Environment, ServerTimestamps>
 ): TypesaurusHookResult<Doc<Model>[] | undefined> {
   const [result, setResult] = useState<Doc<Model>[] | undefined>(undefined)
   const [error, setError] = useState<unknown>(undefined)

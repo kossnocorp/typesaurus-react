@@ -26,6 +26,16 @@ yarn add @typesaurus/preact
 
 _Note that Typesaurus React has Typesaurus listed as a peer dependency which also requires `firebase` package to work in the web environment. The latter isn't listed in dependencies, so make sure you did install both. For more info about Typesaurus dependencies, refer to its Installation section of README. Also, if you have to have `react` or `preact` installed for `@typesaurus/react` and `@typesaurus/preact` respectively._
 
+Additionally, when using with ESM-enabled bundler (like webpack), you'll need to install `lazyfire` that enables asynchronous importing of Firebase modules in the web environment:
+
+```sh
+npm install lazyfire --save
+# Or using Yarn:
+yarn add lazyfire
+```
+
+[Read more about Lazy Fire](https://github.com/kossnocorp/lazyfire).
+
 ## Configuration
 
 Typesaurus React does not require additional configuration, however **when using with ESM-enabled bundler, you should transpile `node_modules`**. TypeScript preserves many modern languages features when it compiles to ESM code. So if you have to support older browsers, use Babel to process the dependencies code
@@ -34,14 +44,30 @@ Typesaurus React does not require additional configuration, however **when using
 
 ### Initialization
 
-To start working with Typesaurus React, initialize Firebase normally:
+To start working with Typesaurus React, you'll need to initialize Firebase.
+
+#### ESM-enabled environment
+
+In the web environment when using ESM-enabled bundler (like webpack), use [Lazy Fire](https://github.com/kossnocorp/lazyfire) to configure the Firebase application:
+
+```ts
+import { configureApp } from 'lazyfire'
+
+configureApp({
+  // Firebase app configuration
+})
+```
+
+#### Legacy environment
+
+In the web environment with ESM-disabled ([see Firebase docs](https://firebase.google.com/docs/web/setup#add-sdks-initialize)):
 
 ```ts
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 
 firebase.initializeApp({
-  // Project configuration
+  // Firebase app configuration
 })
 ```
 

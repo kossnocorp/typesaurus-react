@@ -3,12 +3,15 @@ import { InfiniteLoadMoreState } from '../_lib/infinite'
 
 export default function useInfiniteScroll(
   treshold: number,
-  loadMore: InfiniteLoadMoreState
+  loadMore: InfiniteLoadMoreState,
+  element?: HTMLElement
 ) {
   useEffect(() => {
+    const target = element || document.body
+
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      const pageHeight = document.body.scrollHeight
+      const scrollY = element ? element.scrollTop : window.scrollY
+      const pageHeight = target.scrollHeight
       const windowHeight = window.innerHeight
       const leftHeight = pageHeight - scrollY - windowHeight
 
@@ -18,9 +21,9 @@ export default function useInfiniteScroll(
     }
 
     handleScroll()
-    window.addEventListener('scroll', handleScroll)
+    target.addEventListener('scroll', handleScroll)
     return () => {
-      window.removeEventListener('scroll', handleScroll)
+      target.removeEventListener('scroll', handleScroll)
     }
-  }, [loadMore])
+  }, [loadMore, element])
 }

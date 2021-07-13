@@ -12,7 +12,7 @@ export default function useInfiniteScroll(
     const handleScroll = () => {
       const scrollY = element ? element.scrollTop : window.scrollY
       const pageHeight = target.scrollHeight
-      const windowHeight = window.innerHeight
+      const windowHeight = target.clientHeight
       const leftHeight = pageHeight - scrollY - windowHeight
 
       if (leftHeight < windowHeight * treshold) {
@@ -21,9 +21,11 @@ export default function useInfiniteScroll(
     }
 
     handleScroll()
-    target.addEventListener('scroll', handleScroll)
+
+    const eventTarget = element || document
+    eventTarget.addEventListener('scroll', handleScroll)
     return () => {
-      target.removeEventListener('scroll', handleScroll)
+      eventTarget.removeEventListener('scroll', handleScroll)
     }
   }, [loadMore, element])
 }

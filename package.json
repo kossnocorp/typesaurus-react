@@ -1,6 +1,6 @@
 {
   "name": "@typesaurus/react",
-  "version": "5.0.0-alpha.4",
+  "version": "6.0.0-alpha.1",
   "description": "React Hooks for Typesaurus, type-safe Firestore ODM",
   "keywords": [
     "React",
@@ -49,11 +49,11 @@
     "sinon": "^8.0.4",
     "ts-node": "^8.6.2",
     "typedoc": "^0.16.2",
-    "typesaurus": "8.0.0-alpha.22",
+    "typesaurus": "^10.0.0-alpha.3",
     "typescript": "^4.0.2",
     "webpack": "^4.41.5"
   },
   "peerDependencies": {
-    "typesaurus": ">8"
+    "typesaurus": ">10"
   }
 }

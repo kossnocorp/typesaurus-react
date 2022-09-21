@@ -1,11 +1,15 @@
-import { Typesaurus } from 'typesaurus/types/core'
+import type { TypesaurusCore } from 'typesaurus/types/core'
 import { useEffect, useState } from '../adaptor'
-import { TypesaurusReact } from '../types'
+import type { TypesaurusReact } from '../types'
 
-export function useQuery<Request extends Typesaurus.Request<any>, Result>(
+export function useQuery<
+  Request extends TypesaurusCore.Request<any>,
+  Result,
+  SubscriptionMeta = undefined
+>(
   query: TypesaurusReact.HookInput<
-    | Typesaurus.SubscriptionPromise<Request, Result>
-    | Typesaurus.SubscriptionPromiseOn<Request, Result>
+    | TypesaurusCore.SubscriptionPromise<Request, Result, SubscriptionMeta>
+    | TypesaurusCore.SubscriptionPromiseOn<Request, Result, SubscriptionMeta>
   >
 ): TypesaurusReact.HookResult<Result | undefined> {
   const [result, setResult] = useState<Result | undefined>(undefined)
@@ -20,7 +24,13 @@ export function useQuery<Request extends Typesaurus.Request<any>, Result>(
     if (result) setResult(undefined)
 
     if (typeof query === 'function') {
-      return query(setResult).catch(setError)
+      return query(
+        // TODO: Find a way to satisfy TypeScript here and get rid of the ass:
+        setResult as TypesaurusCore.SubscriptionPromiseCallback<
+          Result,
+          SubscriptionMeta
+        >
+      ).catch(setError)
     } else {
       query.then(setResult).catch(setError)
     }

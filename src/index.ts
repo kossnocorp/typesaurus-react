@@ -1,1 +1,1 @@
-export { useQuery } from './useQuery'
+export { useRead } from './useRead'

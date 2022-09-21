@@ -1,8 +1,8 @@
 import type { TypesaurusCore } from 'typesaurus/types/core'
-import { useEffect, useState } from '../adaptor'
+import { useEffect, useState } from '../adaptor/react'
 import type { TypesaurusReact } from '../types'
 
-export function useQuery<
+export function useRead<
   Request extends TypesaurusCore.Request<any>,
   Result,
   SubscriptionMeta = undefined

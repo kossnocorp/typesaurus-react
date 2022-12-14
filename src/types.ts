@@ -1,5 +1,7 @@
+import type { TypesaurusUtils as Utils } from 'typesaurus/types/utils'
+
 export namespace TypesaurusReact {
-  export type HookInput<Type> = Type | undefined | null | false
+  export type HookInput<Type> = Type | Utils.Falsy
 
   export type HookResult<Result, ExtraMeta = {}> = [
     result: Result,

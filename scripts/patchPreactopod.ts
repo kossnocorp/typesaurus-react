@@ -1,63 +1,62 @@
-import * as fs from 'fs'
-import { resolve } from 'path'
-import { promisify } from 'util'
+import { writeFile, readFile } from "fs/promises";
+import { resolve } from "path";
 
-const readFile = promisify(fs.readFile)
-const writeFile = promisify(fs.writeFile)
-
-const rootPath = process.cwd()
-const packageJSONPath = resolve(rootPath, 'lib/preactopod/package.json')
-const adaptorPackageJSONPath = resolve(
-  rootPath,
-  'lib/preactopod/adaptor/package.json'
-)
-const esmAdaptorPackageJSONPath = resolve(
-  rootPath,
-  'lib/preactopod/esm/adaptor/package.json'
-)
+const path = resolve(process.cwd(), "lib/preactopod");
+const packagePath = resolve(path, "package.json");
+const adapterPackagePath = resolve(path, "adapter/package.json");
+const readmePath = resolve(path, "README.md");
 
 Promise.all([
-  readFile(packageJSONPath, 'utf8')
+  readFile(packagePath, "utf8")
     .then(JSON.parse)
-    .then(packageJSON =>
+    .then((packageJSON) =>
       writeFile(
-        packageJSONPath,
+        packagePath,
         JSON.stringify(patchPackageJSON(packageJSON), null, 2)
       )
     ),
 
   writeFile(
-    adaptorPackageJSONPath,
-    JSON.stringify({ main: './preact' }, null, 2)
+    adapterPackagePath,
+    JSON.stringify(
+      {
+        main: "./preact.js",
+        module: "./preact.mjs",
+      },
+      null,
+      2
+    )
   ),
 
-  writeFile(
-    esmAdaptorPackageJSONPath,
-    JSON.stringify({ main: './preact' }, null, 2)
-  )
-]).catch(err => {
-  console.error(err)
-  process.exit(1)
-})
-
-type PackageJSON = {
-  name: string
-  description: string
-  keywords: string[]
-  peerDependencies: { [key: string]: string }
-  [key: string]: any
-}
+  readFile(readmePath, "utf-8").then((content) =>
+    writeFile(
+      readmePath,
+      content.replace(/react/g, "preact").replace(/React/g, "Preact")
+    )
+  ),
+]).catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
 
 function patchPackageJSON(packageJSON: PackageJSON): PackageJSON {
   return Object.assign({}, packageJSON, {
-    name: '@typesaurus/preact',
-    description: packageJSON.description.replace('React', 'Preact'),
+    name: "@typesaurus/preact",
+    description: packageJSON.description.replace("React", "Preact"),
     keywords: packageJSON.keywords.reduce(
-      (acc, keyword) => acc.concat(keyword.replace('React', 'Preact')),
+      (acc, keyword) => acc.concat(keyword.replace("React", "Preact")),
       [] as string[]
     ),
     peerDependencies: Object.assign({}, packageJSON.peerDependencies, {
-      preact: '*'
-    })
-  })
+      preact: "*",
+    }),
+  });
+}
+
+interface PackageJSON {
+  name: string;
+  description: string;
+  keywords: string[];
+  peerDependencies: { [key: string]: string };
+  [key: string]: any;
 }

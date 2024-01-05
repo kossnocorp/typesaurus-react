@@ -1,6 +1,6 @@
 {
   "name": "@typesaurus/react",
-  "version": "6.0.0-alpha.3",
+  "version": "6.0.0-rc.1",
   "description": "React Hooks for Typesaurus, type-safe Firestore ODM",
   "keywords": [
     "React",
@@ -10,48 +10,50 @@
     "TypeScript",
     "Typesaurus"
   ],
-  "main": "index.js",
-  "module": "esm/index.js",
   "sideEffects": false,
+  "main": "index.js",
+  "module": "index.mjs",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "require": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      },
+      "import": {
+        "types": "./index.d.mts",
+        "default": "./index.mjs"
+      }
+    },
+    "./useRead": {
+      "require": {
+        "types": "./useRead/index.d.ts",
+        "default": "./useRead/index.js"
+      },
+      "import": {
+        "types": "./useRead/index.d.mts",
+        "default": "./useRead/index.mjs"
+      }
+    }
+  },
   "repository": "https://github.com/kossnocorp/typesaurus-react",
   "author": "Sasha Koss <koss@nocorp.me>",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.8.2",
-    "@babel/preset-typescript": "^7.12.7",
-    "@firebase/testing": "^0.20.11",
-    "@testing-library/react-hooks": "^3.4.1",
-    "@types/jasmine": "^3.5.0",
-    "@types/jest": "^26.0.10",
-    "@types/node": "^13.1.6",
-    "@types/react": "^16.9.17",
-    "@types/sinon": "^7.5.1",
-    "@types/webpack-env": "^1.15.0",
-    "babel-loader": "^8.0.6",
-    "babel-preset-power-assert": "^3.0.0",
-    "firebase": "^9.11.0",
-    "firebase-admin": "^11.1.0",
-    "firebase-tools": "^11.14.1",
-    "jest": "^26.4.2",
-    "karma": "^4.4.1",
-    "karma-chrome-launcher": "^3.1.0",
-    "karma-jasmine": "^3.1.0",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^4.0.2",
-    "nanoid": "^3.1.12",
-    "power-assert": "^1.6.1",
-    "preact": "^10.2.1",
-    "prettier": "^2.1.1",
-    "puppeteer": "^2.0.0",
-    "react": "^16.12.0",
-    "react-test-renderer": "^16.13.1",
-    "sinon": "^8.0.4",
-    "ts-node": "^8.6.2",
-    "typedoc": "^0.16.2",
-    "typesaurus": "^10.0.0-alpha.34",
-    "typescript": "^4.8.4",
-    "webpack": "^4.41.5"
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.7",
+    "@babel/plugin-transform-modules-commonjs": "^7.23.3",
+    "@babel/preset-env": "^7.23.7",
+    "@babel/preset-typescript": "^7.23.3",
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.46",
+    "babel-plugin-add-import-extension": "^1.6.0",
+    "preact": "^10.19.3",
+    "prettier": "^3.1.1",
+    "react": "^18.2.0",
+    "tsx": "^4.7.0",
+    "typesaurus": "^10.0.0-rc.8",
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "typesaurus": ">10"

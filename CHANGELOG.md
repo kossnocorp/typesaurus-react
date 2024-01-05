@@ -7,13 +7,17 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
-## 4.0.1 - 2020-12-08
+## v6.0.0 - 2023-01-??
+
+Completely revamped Typesaurus with a new API and new features. [Follow this guide to learn how it works](https://typesaurus.com/get-started/).
+
+## v4.0.1 - 2020-12-08
 
 ### Fixed
 
 - Fixed `useInfiniteQuery` behavior when the collection or query are changing. Before, the previous result would not be cleared.
 
-## 4.0.0 - 2020-09-06
+## v4.0.0 - 2020-09-06
 
 ### Changed
 
@@ -23,7 +27,7 @@ This change log follows the format documented in [Keep a CHANGELOG].
 
 - `useGet` and `useOnGet` now accept references (i.e. `useGet(user.ref)`).
 
-## 3.0.0 - 2020-04-17
+## v3.0.0 - 2020-04-17
 
 ### Changed
 
@@ -33,13 +37,13 @@ This change log follows the format documented in [Keep a CHANGELOG].
 
 - Added ESM version of the code that enables tree-shaking.
 
-## 2.0.0 - 2020-04-10
+## v2.0.0 - 2020-04-10
 
 ### Changed
 
 - **BREAKING**: Now, when query or collection is changed, hook state resets to `undefined` while previously it would stay as is until the new data is fetched.
 
-## 1.0.0 - 2020-02-20
+## v1.0.0 - 2020-02-20
 
 ### Changed
 
@@ -51,13 +55,13 @@ This change log follows the format documented in [Keep a CHANGELOG].
   - `useGetMany`
   - `useOnGetMany`
 
-## 0.4.2 - 2020-01-27
+## v0.4.2 - 2020-01-27
 
 ### Fixed
 
 - Fixed the Preact package.
 
-## 0.4.0 - 2020-01-27
+## v0.4.0 - 2020-01-27
 
 ### Added
 
@@ -67,7 +71,7 @@ This change log follows the format documented in [Keep a CHANGELOG].
   - `useAll`
   - `useOnAll`
 
-## 0.3.0 - 2020-01-15
+## v0.3.0 - 2020-01-15
 
 ### Changed
 
@@ -79,13 +83,13 @@ This change log follows the format documented in [Keep a CHANGELOG].
 
 - Publish separate `preactopod` package for Preact.
 
-## 0.2.0 - 2020-01-14
+## v0.2.0 - 2020-01-14
 
 ### Changed
 
 - Make Reactopod work both with React and Preact.
 
-## 0.1.0 - 2020-01-13
+## v0.1.0 - 2020-01-13
 
 ### Added
 

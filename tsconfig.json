@@ -1,18 +1,13 @@
 {
   "compilerOptions": {
-    "rootDirs": ["."],
-    "declaration": true,
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "outDir": "lib/reactopod",
+    "target": "es2016",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
-    "noImplicitAny": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "jsx": "react",
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "exclude": ["lib", "node_modules"]
+  "include": ["src/**/*.ts", "scripts/**/*.ts"]
 }

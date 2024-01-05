@@ -1,53 +1,43 @@
 .DEFAULT_GOAL := build
 .PHONY: build
 
-BIN = $(shell yarn bin)
+types:
+	npx tsc --build
 
-test:
-	npx firebase emulators:exec --only firestore "npx jest --env node"
-.PHONY: test
+types-watch:
+	npx tsc --build --watch
 
-test-watch:
-	npx firebase emulators:exec --only firestore "npx jest --env node --watch --detectOpenHandles"
-
-test-setup:
-	npx firebase setup:emulators:firestore
-
-test-system: test-system-node test-system-browser
-
-test-system-node:
-	npx jest --env node
-
-test-system-node-watch:
-	npx jest --env node --watch
-
-test-system-browser:
-	npx karma start --single-run
-
-test-system-browser-watch:
-	npx karma start
+test-types: install-attw build 
+	@cd lib/reactopod && attw --pack
+	@cd lib/preactopod && attw --pack
 
 build:
 	@rm -rf lib
 	@npx tsc --project tsconfig.lib.json
-	@npx prettier "lib/**/*.[jt]s" --write --loglevel silent
+	@env BABEL_ENV=esm npx babel src --config-file ./babel.config.lib.json --source-root src --out-dir lib/reactopod --extensions .mjs,.ts --out-file-extension .mjs --quiet
+	@env BABEL_ENV=cjs npx babel src --config-file ./babel.config.lib.json --source-root src --out-dir lib/reactopod --extensions .mjs,.ts --out-file-extension .js --quiet
+	@make build-mts
 	@cp package.json lib/reactopod
 	@cp *.md lib/reactopod
-	@rsync --archive --prune-empty-dirs --exclude '*.ts' --relative src/./ lib/reactopod
-	@npx tsc --project tsconfig.lib.json --outDir lib/reactopod/esm --module es2020 --target es2019
-	@cp src/adaptor/package.json lib/reactopod/esm/adaptor/package.json
 	@cp -r lib/reactopod lib/preactopod
-	@npx ts-node scripts/patchReactopod.ts
-	@npx ts-node scripts/patchPreactopod.ts
+	@npx tsx scripts/patchReactopod.ts
+	@npx tsx scripts/patchPreactopod.ts
+
+build-mts:
+	@find lib/reactopod -name '*.d.ts' | while read file; do \
+		new_file=$${file%.d.ts}.d.mts; \
+		cp $$file $$new_file; \
+	done
 
 publish: build
-	cd lib/reactopod && npm publish --access public
-	cd lib/preactopod && npm publish --access public
+	@cd lib/reactopod && npm publish --access public
+	@cd lib/preactopod && npm publish --access public
 
 publish-next: build
-	cd lib/reactopod && npm publish --access public --tag next
-	cd lib/preactopod && npm publish --access public --tag next
+	@cd lib/reactopod && npm publish --access public --tag next
+	@cd lib/preactopod && npm publish --access public --tag next
 
-docs:
-	@npx typedoc --theme minimal --name Reactopod
-.PHONY: docs
+install-attw:
+	@if ! command -v attw >/dev/null 2>&1; then \
+		npm i -g @arethetypeswrong/cli; \
+	fi

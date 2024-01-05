@@ -1,4 +1,11 @@
 {
   "extends": "./tsconfig",
-  "exclude": ["lib", "node_modules", "**/test.ts", "test", "scripts", "legacy"]
+  "compilerOptions": {
+    "rootDir": "./src",
+    "sourceMap": true,
+    "outDir": "lib/reactopod",
+    "declaration": true,
+    "emitDeclarationOnly": true
+  },
+  "include": ["src/**/*.ts"]
 }

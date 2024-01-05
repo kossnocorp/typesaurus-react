@@ -1,1 +1,1 @@
-export { useRead } from './useRead'
+export { useRead } from "./useRead/index.js";

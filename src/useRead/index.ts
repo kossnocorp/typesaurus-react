@@ -17,11 +17,11 @@ export function useRead<
   const loading = result === undefined && !error;
 
   useEffect(() => {
-    // The request is not ready yet
-    if (!query) return;
-
     // The result is defined, hence the request has changed
     if (result) setResult(undefined);
+
+    // The request is not ready yet
+    if (!query) return;
 
     if (typeof query === "function") {
       return query(
@@ -34,6 +34,7 @@ export function useRead<
     } else {
       query.then(setResult).catch(setError);
     }
+    // TODO: Come up with a better way to serialize and identify request
   }, [!!query, query && JSON.stringify(query.request)]);
 
   return [result, { loading, error }];

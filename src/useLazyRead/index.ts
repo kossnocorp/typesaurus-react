@@ -1,18 +1,18 @@
-import type { TypesaurusCore } from "typesaurus";
+import type { TypesaurusCore as Core } from "typesaurus";
 import { useState, useCallback } from "../adapter/react.js";
-import type { TypesaurusReact } from "../types.js";
+import type { TypesaurusReact as React } from "../types.js";
 import { useRead } from "../index.js";
 
 export function useLazyRead<
-  Request extends TypesaurusCore.Request<any>,
+  Request extends Core.Request<any>,
   Result,
   SubscriptionMeta = undefined,
 >(
-  query: TypesaurusReact.HookInput<
-    | TypesaurusCore.SubscriptionPromise<Request, Result, SubscriptionMeta>
-    | TypesaurusCore.SubscriptionPromiseOn<Request, Result, SubscriptionMeta>
+  query: React.HookInput<
+    | Core.SubscriptionPromise<Request, Result, SubscriptionMeta>
+    | Core.SubscriptionPromiseOn<Request, Result, SubscriptionMeta>
   >,
-): TypesaurusReact.HookLazyUse<Result | undefined> {
+): React.HookLazyUse<Result | undefined> {
   const [evaluate, setEvaluate] = useState(false);
   const result = useRead(evaluate && query);
   const lazyEval = useCallback(() => {
@@ -21,3 +21,8 @@ export function useLazyRead<
   }, [evaluate, result]);
   return lazyEval;
 }
+
+export const dummyLazyReadHook: React.HookLazyUse<any> = () => [
+  undefined,
+  { loading: true, error: undefined },
+];

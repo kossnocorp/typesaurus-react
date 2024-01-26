@@ -15,10 +15,13 @@ export function useLazyRead<
 ): React.HookLazyUse<Result | undefined> {
   const [evaluate, setEvaluate] = useState(false);
   const result = useRead(evaluate && query);
-  const lazyEval = useCallback(() => {
-    !evaluate && setEvaluate(true);
-    return result;
-  }, [evaluate, result]);
+  const lazyEval = useCallback(
+    (hookEvaluate?: boolean) => {
+      !evaluate && hookEvaluate !== false && setEvaluate(true);
+      return result;
+    },
+    [evaluate, result],
+  );
   return lazyEval;
 }
 

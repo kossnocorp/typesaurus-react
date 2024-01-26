@@ -1,1 +1,1 @@
-export { useEffect, useRef, useState } from "preact/hooks";
+export { useEffect, useRef, useState, useCallback } from "preact/hooks";

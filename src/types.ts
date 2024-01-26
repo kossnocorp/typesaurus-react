@@ -7,4 +7,9 @@ export namespace TypesaurusReact {
     result: Result,
     meta: { loading: boolean; error: unknown } & ExtraMeta,
   ];
+
+  export type HookLazyUse<Result, ExtraMeta = {}> = () => HookResult<
+    Result,
+    ExtraMeta
+  >;
 }

@@ -1,5 +1,5 @@
 import type { TypesaurusCore } from "typesaurus";
-import { useEffect, useState } from "../adapter/react.js";
+import { useEffect, useState, useMemo } from "../adapter/react.js";
 import type { TypesaurusReact } from "../types.js";
 
 export function useRead<
@@ -14,7 +14,6 @@ export function useRead<
 ): TypesaurusReact.HookResult<Result | undefined> {
   const [result, setResult] = useState<Result | undefined>(undefined);
   const [error, setError] = useState<unknown>(undefined);
-  const loading = result === undefined && !error;
 
   useEffect(() => {
     // The result is defined, hence the request has changed
@@ -25,7 +24,6 @@ export function useRead<
 
     if (typeof query === "function") {
       return query(
-        // TODO: Find a way to satisfy TypeScript here and get rid of the ass:
         setResult as TypesaurusCore.SubscriptionPromiseCallback<
           Result,
           SubscriptionMeta
@@ -37,5 +35,12 @@ export function useRead<
     // TODO: Come up with a better way to serialize and identify request
   }, [!!query, query && JSON.stringify(query.request)]);
 
-  return [result, { loading, error }];
+  const status = useMemo(
+    () => ({ loading: result === undefined && !error, error }),
+    [result, error],
+  );
+
+  const tuple = useMemo(() => [result, status] as const, [result, status]);
+
+  return tuple;
 }

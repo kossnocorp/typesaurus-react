@@ -3,7 +3,7 @@ import type { TypesaurusUtils } from "typesaurus";
 export namespace TypesaurusReact {
   export type HookInput<Type> = Type | TypesaurusUtils.Falsy;
 
-  export type HookResult<Result, ExtraMeta = {}> = [
+  export type HookResult<Result, ExtraMeta = {}> = readonly [
     result: Result,
     meta: { loading: boolean; error: unknown } & ExtraMeta,
   ];

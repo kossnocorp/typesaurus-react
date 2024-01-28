@@ -1,6 +1,6 @@
 {
   "name": "@typesaurus/react",
-  "version": "6.0.0-rc.5",
+  "version": "6.0.0-rc.6",
   "description": "React Hooks for Typesaurus, type-safe Firestore ODM",
   "keywords": [
     "React",

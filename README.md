@@ -1,3 +1,5 @@
+🎉️ NEW: [Typesaurus X is out](https://blog.typesaurus.com/typesaurus-x-is-out/)!
+
 # 🦕 Typesaurus React
 
 React Hooks for [Typesaurus](https://github.com/kossnocorp/typesaurus), type-safe Firestore ODM.

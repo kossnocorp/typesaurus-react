@@ -1,5 +1,5 @@
 import type { TypesaurusCore as Core } from "typesaurus";
-import { useState, useCallback } from "../adapter/react.js";
+import { useState, useCallback } from "../adapter";
 import type { TypesaurusReact as React } from "../types.js";
 import { useRead } from "../index.js";
 

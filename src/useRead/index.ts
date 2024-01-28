@@ -1,5 +1,5 @@
 import type { TypesaurusCore } from "typesaurus";
-import { useEffect, useState, useMemo } from "../adapter/react.js";
+import { useEffect, useState, useMemo } from "../adapter";
 import type { TypesaurusReact } from "../types.js";
 
 export function useRead<
@@ -16,24 +16,49 @@ export function useRead<
   const [error, setError] = useState<unknown>(undefined);
 
   useEffect(() => {
-    // The result is defined, hence the request has changed
-    if (result) setResult(undefined);
+    // Use ignore flag to prevent setting state after the hook is unmounted
+    let ignore = false;
+
+    // Reset the state since the query has changed
+    setResult(undefined);
+    setError(undefined);
 
     // The request is not ready yet
     if (!query) return;
 
     if (typeof query === "function") {
-      return query(
-        setResult as TypesaurusCore.SubscriptionPromiseCallback<
-          Result,
-          SubscriptionMeta
-        >,
-      ).catch(setError);
+      // It's a update subscription function, so we call it
+      const off = query(((newResult: Result) => {
+        if (ignore) return;
+        setResult(newResult);
+      }) as TypesaurusCore.SubscriptionPromiseCallback<
+        Result,
+        SubscriptionMeta
+      >).catch((newError) => {
+        if (ignore) return;
+        setError(newError);
+      });
+      return () => {
+        ignore = true;
+        off();
+      };
     } else {
-      query.then(setResult).catch(setError);
+      // It's a promise, so we await it
+      query
+        .then((newResult) => {
+          if (ignore) return;
+          setResult(newResult);
+        })
+        .catch((newError) => {
+          if (ignore) return;
+          setError(newError);
+        });
+      return () => {
+        ignore = true;
+      };
     }
     // TODO: Come up with a better way to serialize and identify request
-  }, [!!query, query && JSON.stringify(query.request)]);
+  }, [query && JSON.stringify(query.request), setResult, setError]);
 
   const status = useMemo(
     () => ({ loading: result === undefined && !error, error }),

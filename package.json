@@ -34,6 +34,16 @@
         "types": "./useRead/index.d.mts",
         "default": "./useRead/index.mjs"
       }
+    },
+    "./useLazyRead": {
+      "require": {
+        "types": "./useLazyRead/index.d.ts",
+        "default": "./useLazyRead/index.js"
+      },
+      "import": {
+        "types": "./useLazyRead/index.d.mts",
+        "default": "./useLazyRead/index.mjs"
+      }
     }
   },
   "repository": "https://github.com/kossnocorp/typesaurus-react",

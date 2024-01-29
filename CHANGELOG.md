@@ -7,6 +7,14 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## v6.0.1 - 2024-01-29
+
+### Fixed
+
+- Fixed the adapter imports in the ESM version.
+
+- Added the `useLazyRead` export to `package.json`.
+
 ## v6.0.0 - 2024-01-28
 
 Completely revamped Typesaurus with a new API and new features. [Follow this guide to learn how it works](https://typesaurus.com/get-started/).

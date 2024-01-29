@@ -1,9 +1,9 @@
-import { writeFile, readFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import { resolve } from "path";
 
 const path = resolve(process.cwd(), "lib/preactopod");
 const packagePath = resolve(path, "package.json");
-const adapterPackagePath = resolve(path, "adapter/package.json");
+const adapterPath = resolve(path, "adapter");
 const readmePath = resolve(path, "README.md");
 
 Promise.all([
@@ -12,27 +12,24 @@ Promise.all([
     .then((packageJSON) =>
       writeFile(
         packagePath,
-        JSON.stringify(patchPackageJSON(packageJSON), null, 2)
-      )
+        JSON.stringify(patchPackageJSON(packageJSON), null, 2),
+      ),
     ),
 
-  writeFile(
-    adapterPackagePath,
-    JSON.stringify(
-      {
-        main: "./preact.js",
-        module: "./preact.mjs",
-      },
-      null,
-      2
-    )
+  Promise.all(
+    ["index.d.mts", "index.d.ts", "index.js", "index.mjs"].map((file) => {
+      const filePath = resolve(adapterPath, file);
+      return readFile(filePath, "utf8").then((content) =>
+        writeFile(filePath, content.replace(/react/g, "preact")),
+      );
+    }),
   ),
 
   readFile(readmePath, "utf-8").then((content) =>
     writeFile(
       readmePath,
-      content.replace(/react/g, "preact").replace(/React/g, "Preact")
-    )
+      content.replace(/react/g, "preact").replace(/React/g, "Preact"),
+    ),
   ),
 ]).catch((err) => {
   console.error(err);
@@ -45,7 +42,7 @@ function patchPackageJSON(packageJSON: PackageJSON): PackageJSON {
     description: packageJSON.description.replace("React", "Preact"),
     keywords: packageJSON.keywords.reduce(
       (acc, keyword) => acc.concat(keyword.replace("React", "Preact")),
-      [] as string[]
+      [] as string[],
     ),
     peerDependencies: Object.assign({}, packageJSON.peerDependencies, {
       preact: "*",

@@ -1,5 +1,5 @@
 import type { TypesaurusCore } from "typesaurus";
-import { useEffect, useState, useMemo } from "../adapter";
+import { useEffect, useState, useMemo } from "../adapter/index.js";
 import type { TypesaurusReact } from "../types.js";
 
 export function useRead<
